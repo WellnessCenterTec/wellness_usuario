@@ -82,12 +82,12 @@ export default function Home() {
       </div>
 
       <div>
-        <h1 className='text-center mt-8 text-2xl'>  <strong> Aforo actual </strong>   </h1>
+        <h1 className='text-center mt-8 text-3xl'>  <strong> Aforo actual </strong>   </h1>
         <h3 className='text-center mt-10 text-3xl'>300</h3>
       </div>
 
       <div>
-        <h1 className='text-center mt-8 text-2xl'>  <strong> Disponibles</strong>   </h1>
+        <h1 className='text-center mt-8 text-3xl'>  <strong> Disponibles</strong>   </h1>
         <h3 className='text-center mt-10 text-3xl'>200</h3>
       </div>
 
@@ -97,14 +97,7 @@ export default function Home() {
 
 </div>
 
-
-
-
-
        <h1 className='mx-8 mt-10 text-2xl  lg:text-3xl xl:text-3xl'> <strong> Servicios </strong></h1>
-
-
-
 
       <div className="grid grid-cols-1 gap-3 mx-14 mb-10 mt-5 lg:grid-cols-3 xl:grid-cols-3 " >
 
@@ -115,11 +108,6 @@ export default function Home() {
 
         
       </div>
-
-  
-
-   
-
 
   </Nav>
   
