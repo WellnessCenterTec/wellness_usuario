@@ -6,7 +6,6 @@ interface Props {
   img: string;
   name: string;
 }
-
 export default function Space({ name, img }: Props) {
   return (
     <div className="h-52 w-full rounded-3xl relative">
