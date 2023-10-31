@@ -1,9 +1,56 @@
+"use client"
+
+import clienteAxios from "@/config/clienteAxios";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
+
+import jsCookie from "js-cookie"
+import { useDispatch } from "react-redux";
+import { setAuth } from "@/redux/slices/authSlice";
+import { useRouter } from "next/navigation";
+import { handleError } from "@/utils/errorHandler";
 
 export default function Login() {
+
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+
+  const dispatch = useDispatch()
+  const router = useRouter()
+
+  const handleSubmit = async (e:any)=>{
+    e.preventDefault()
+
+    try {
+      
+      // Hacemos la peticion
+
+      const {data} = await clienteAxios.post("/user/login",{
+        email, password
+      })
+
+      // Colocamos la cookie
+
+      jsCookie.set("token", data.token, {
+        expires: new Date().setMonth(new Date().getMonth() + 1),
+      });
+
+      // Guardamos la autenticacion
+
+      dispatch(setAuth(data))
+
+      // Mandamos a la pantalla
+      router.push("/")
+
+    } catch (error:any) {
+      return handleError(error)
+    }
+  }
+
   return (
-    <div className="min-h-screen relative">
+    <form 
+    onSubmit={handleSubmit}
+    className="min-h-screen relative">
       {/* Imagen de fondo */}
       <Image
         src="/estadio.png"
@@ -36,6 +83,8 @@ export default function Login() {
               className="bg-transparent text-white py-1 rounded-md w-full"
               type="email"
               placeholder="Correo"
+              onChange={(e)=>setEmail(e.target.value)}
+              value={email}
               />
             </div>
 
@@ -44,6 +93,8 @@ export default function Login() {
               className="bg-transparent text-white py-1 rounded-md w-full"
               type="password" 
               placeholder="Contraseña"
+              onChange={(e)=>setPassword(e.target.value)}
+              value={password}
               />
             </div>
 
@@ -55,6 +106,6 @@ export default function Login() {
           </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 }

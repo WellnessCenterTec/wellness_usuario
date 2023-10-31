@@ -25,23 +25,23 @@ export default function layout({ children }: Props) {
     setIcon(!menuIcon);
   };
 
-  // useEffect(()=>{
-  //   dispatch(loadPerfil())
-  // },[])
+  useEffect(()=>{
+    dispatch(loadPerfil())
+  },[])
 
-  // useEffect(() => {
-  //   if (!auth?.id && !cargando) {
-  //     router.push("/login");
-  //   }
-  // }, [cargando, auth, router]);
+  useEffect(() => {
+    if (!auth?.id && !cargando) {
+      router.push("/login");
+    }
+  }, [cargando, auth, router]);
 
-  // if (cargando) {
-  //   return (
-  //     <div className="w-full min-h-screen grid place-items-center">
-  //       <img src="/next.svg" alt="Logo" className="w-32 h-32 animate-ping" />
-  //     </div>
-  //   );
-  // }
+  if (cargando) {
+    return (
+      <div className="w-full min-h-screen grid place-items-center">
+        <img src="/next.svg" alt="Logo" className="w-32 h-32 animate-ping" />
+      </div>
+    );
+  }
 
   return (
     <>

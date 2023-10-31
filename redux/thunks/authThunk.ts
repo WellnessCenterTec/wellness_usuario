@@ -14,7 +14,7 @@ export const loadPerfil = createAsyncThunk(
         return;
       }
 
-      const { data } = await clienteAxios("/admin/profile", config);
+      const { data } = await clienteAxios("/user/profile", config);
 
       return data;
     } catch (error: any) {

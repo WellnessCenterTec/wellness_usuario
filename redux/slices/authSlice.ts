@@ -1,7 +1,7 @@
 
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { loadPerfil } from "../thunks/authThunk";
-import { AdminInt } from "@/styles/ModelTypes";
+import { AdminInt, UserInt } from "@/styles/ModelTypes";
 
 
 // Creacion del slice
@@ -9,7 +9,7 @@ import { AdminInt } from "@/styles/ModelTypes";
 export const rutinaSlice = createSlice({
   name: "auth",
   initialState: {
-    auth:null as null | AdminInt,
+    auth:null as null | UserInt,
     cargando:true
   },
   reducers: {
