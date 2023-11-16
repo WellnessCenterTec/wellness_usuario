@@ -1,91 +1,159 @@
 "use client"
 
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import {Switch} from "@headlessui/react"
 import PageHeader from '@/components/shared/PageHeader'
 import Reservable from '@/components/pages/space/Reservable'
+import { useRouter } from 'next/router';
+
+
+import useSWR from "swr";
+import { fetcher } from "@/config/fetcher";
+import { ReservableInt } from '@/styles/ModelTypes';
+import { handleError } from "@/utils/errorHandler";
+import { axiosConfig } from "@/config/axiosConfig";
+import clienteAxios from "@/config/clienteAxios";
+
+
+import { usePathname, useSearchParams, useParams } from 'next/navigation'
+import { url } from 'inspector';
+import Spinner from '@/components/shared/Spinner';
+
+
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
 
 export default function Space() {
+  const params = useParams();
+  const spaceId = params.id;
+  var fechasPrimeros 
+  var objetosConFechaSeleccionada
+  const [diaSeleccionado, setDia] = useState<null | Date>(null)
+  const [botonSeleccionado, setBotonSeleccionado] = useState<null | number>(null)
+
+
+ const { data } = useSWR<ReservableInt[][]>(`/reservable/getReservables/${spaceId}`, fetcher);
+
+ console.log(data)
+
+ useEffect(()=>{
+  if(data != undefined){
+    setDia(data[0][0].init_date)
+  
+  }
+},[data])
+if (data !== undefined && diaSeleccionado !== null) {
+  // Mapear la primera fecha de cada grupo
+  fechasPrimeros = data.map((grupo) => (grupo.length > 0 ? grupo[0].init_date : null));
+
+  // Filtrar los objetos que coinciden con la fecha seleccionada (año, mes, día)
+  objetosConFechaSeleccionada = data.flatMap(grupo =>
+    grupo.filter(reservable => {
+      const fechaReservable = new Date(reservable.init_date);
+      const fechaSeleccionada = new Date(diaSeleccionado);
+      
+      return (
+        fechaReservable.getFullYear() === fechaSeleccionada.getFullYear() &&
+        fechaReservable.getMonth() === fechaSeleccionada.getMonth() &&
+        fechaReservable.getDate() === fechaSeleccionada.getDate()
+      );
+    })
+  );
+}
+
+ function formatearFecha(fecha: Date | null){
+  const opcionesPorDefecto: Intl.DateTimeFormatOptions = {
+    weekday: 'short',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  };
+
+  if (fecha != null) {
+    const fechaNew = new Date(fecha)
+    return fechaNew.toLocaleDateString('es-ES', opcionesPorDefecto);
+  } else {
+    return 'Fecha inválida';
+  }
+ }
+
+ function formatearHora(fecha: Date | null){
+
+  if (fecha != null) {
+    const fechaNew = new Date(fecha)
+    const horas = fechaNew.getHours();
+    const minutos = fechaNew.getMinutes();
+    const segundos = fechaNew.getSeconds();
+    const horaFormateada = `${agregarCeroDelante(horas)}:${agregarCeroDelante(minutos)}`;
+
+    return horaFormateada
+  } else {
+    return 'Fecha inválida';
+  }
+ }
+
+ function agregarCeroDelante(valor: number) {
+  return valor < 10 ? `0${valor}` : valor;
+}
+
+
+
   return (
     <div>
 
         <PageHeader 
             title='Crossfit'
             image='/samples/fondo.jpeg'
-        />
-        <div className='ml-3 mt-3 space-y-2'>
-            <p className='text-blue-800 font-bold text-lg '>Reservar</p>
-            <p>Filtrar por disponiblidad</p>
+        />        
 
-            <Switch
-            checked={true}
-            onChange={(e) => {
-              
-            }}
-            className={`switch ${
-              true ? "bg-blue-600" : "bg-gray-200"
-            } relative inline-flex h-6 w-11 items-center rounded-full`}
-          >
-            <span className="sr-only">Es un dropset</span>
-            <span
-              className={`${
-                true ? "translate-x-6" : "translate-x-1"
-              } inline-block h-4 w-4 transform rounded-full bg-white transition`}
-            />
-          </Switch>
+
+          <div className='flex-wrap gap-6 mt-4 mx-auto w-5/6'>
+          {fechasPrimeros !== undefined && fechasPrimeros.length > 0 ? (
+            <Slider slidesToShow={3} slidesToScroll={1}>
+              {fechasPrimeros.map((fecha, index) => (
+                <div key={index} className='px-2'>
+                  <button
+                    type='button'
+                    onClick={() => {
+                      setDia(fecha);
+                      setBotonSeleccionado(index);
+                    }}
+                    className={`px-2 py-2 rounded-lg text-xl ${botonSeleccionado === index ? 'bg-blue-800 text-gray-50' : 'bg-gray-300 text-blue-800'}`}
+                    style={{ width: '100%' }}
+                  >
+                    {formatearFecha(fecha)}
+                  </button>
+                </div>
+              ))}
+            </Slider>
+          ) : (
+            <p>No hay fechas disponibles.</p>
+          )}
         </div>
 
-        <div className='flex items-center gap-6 mt-4 mx-auto w-5/6'>
-
-            <button
-                type='button'
-                className='bg-blue-800 px-2 py-2 rounded-lg text-gray-50 text-xl'
-            >
-                Mie, 14
-            </button>
-
-            <button
-                type='button'
-                className='text-gray-600 text-xl'
-            >
-                15
-            </button>
-            <button
-                type='button'
-                className='text-gray-600 text-xl'
-            >
-                16
-            </button>
-
-        </div>
-
-        <div className='w-5/6 h-[1px] bg-gray-800 mt-3 mx-auto'>
-
-        </div>
+        <div className='w-5/6 h-[1px] bg-gray-800 mt-3 mx-auto'/>
+        
 
         <div className='mx-auto w-5/6 mt-3 grid place-items-center gap-4'>
 
-            <Reservable 
-                hour='8:00 AM'
-                
-                teacher='Jose'
+
+        {objetosConFechaSeleccionada !== undefined && objetosConFechaSeleccionada.length > 0 ? (
+             objetosConFechaSeleccionada.map((reservable, index) => (
+              <div key={index} className='px-2'>
+                <Reservable 
+                hour= {formatearHora(reservable.init_date)}
+                teacher={reservable.coach}
                 available={true}
                 image='/samples/Avatar.png'
             />
-            <Reservable 
-                hour='10:30:00 AM'
-                
-                teacher='Jose'
-                available={false}
-                image='/samples/Avatar.png'
-            />
-            <Reservable 
-                hour='8:00 AM'
-                
-                teacher='Jose'
-                available={true}
-                image='/samples/Avatar.png'
-            />
+              </div>
+            ))
+          ) : (
+            <p>No hay reservables disponibles.</p>
+          )}
+
 
         </div>
 

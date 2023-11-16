@@ -1,12 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { useDispatch } from "react-redux";
+
 
 interface Props {
   img: string;
   name: string;
+  id: number;
 }
-export default function Space({ name, img }: Props) {
+export default function Space({ name, img, id }: Props) {
+  const dispatch = useDispatch();
+
   return (
     <div className="h-52 w-full rounded-3xl relative">
       {/* Imagen de fondo */}
@@ -31,7 +36,8 @@ export default function Space({ name, img }: Props) {
 
         <Link
           className="bg-blue-600 text-gray-50 px-2 py-1 rounded-lg text-lg absolute bottom-5"
-          href="/space/1"
+          href={`/space/${id}`}
+
         >
           Reservar
         </Link>

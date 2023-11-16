@@ -28,3 +28,21 @@ export interface SpaceInt {
   close_date: string;
   open: boolean;
 }
+
+export interface ReservableInt {
+  id: number;
+  adminId: number;
+  actualQuota: number;
+  coach: string;
+  end_date: Date;
+  init_date: Date;
+  quota: number;
+  }
+  
+  export interface ReservaInt {
+  id: number;
+  espacio: string;
+  ubicación: string;
+  fecha: Date;
+  hora: number;
+  }

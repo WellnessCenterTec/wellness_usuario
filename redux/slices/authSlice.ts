@@ -10,12 +10,13 @@ export const rutinaSlice = createSlice({
   name: "auth",
   initialState: {
     auth:null as null | UserInt,
-    cargando:true
+    cargando:true,
   },
   reducers: {
     setAuth:(state,action)=>{
       state.auth = action.payload
       state.cargando = false
+      
   },
   removeAuth:(state)=>{
       state.auth = null
