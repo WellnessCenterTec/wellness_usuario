@@ -24,8 +24,16 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+
+
+
 
 export default function Space() {
+
+  const space = useSelector((state: RootState) => state.index);
+
   const params = useParams();
   const spaceId = params.id;
   var fechasPrimeros 
@@ -33,11 +41,19 @@ export default function Space() {
   const [diaSeleccionado, setDia] = useState<null | Date>(null)
   const [botonSeleccionado, setBotonSeleccionado] = useState<null | number>(null)
 
+  const [spaceName, setSpaceName] = useState("")
+
+
 
  const { data } = useSWR<ReservableInt[][]>(`/reservable/getReservables/${spaceId}`, fetcher);
 
 
  useEffect(()=>{
+
+  if(space?.spaceName){
+    setSpaceName(space?.spaceName)
+  }
+
   if(data != undefined && data != null && data.length != 0){
     setDia(data[0][0].init_date)
     setBotonSeleccionado(0)
@@ -99,13 +115,11 @@ if (data !== undefined && diaSeleccionado !== null) {
   return valor < 10 ? `0${valor}` : valor;
 }
 
-
-
   return (
     <div>
 
         <PageHeader 
-            title='Crossfit'
+            title= {spaceName}
             image='/samples/fondo.jpeg'
         />        
 

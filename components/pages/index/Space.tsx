@@ -1,7 +1,11 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { useDispatch } from "react-redux";
+
+import {setSpaceName} from "@/redux/slices/indexSlice";
 
 
 interface Props {
@@ -11,6 +15,10 @@ interface Props {
 }
 export default function Space({ name, img, id }: Props) {
   const dispatch = useDispatch();
+
+  const handleSelectedSpace = () => {
+    dispatch(setSpaceName(name))   
+  }
 
   return (
     <div className="h-52 w-full rounded-3xl relative">
@@ -37,7 +45,7 @@ export default function Space({ name, img, id }: Props) {
         <Link
           className="bg-blue-600 text-gray-50 px-2 py-1 rounded-lg text-lg absolute bottom-5"
           href={`/space/${id}`}
-
+          onClick ={() => handleSelectedSpace()}
         >
           Reservar
         </Link>
