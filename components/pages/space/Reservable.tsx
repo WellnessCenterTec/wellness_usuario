@@ -7,12 +7,18 @@ interface Props {
   teacher: string;
   image: string;
   available: boolean;
+  spaceId: number
+  actualQuota: number
+  quota: number
+  init_date: Date
+  end_date: Date
 }
 
-export default function Reservable({ hour, teacher, image, available }: Props) {
+export default function Reservable({ hour, teacher, image, available, spaceId, actualQuota, quota, init_date, end_date}: Props) {
+
   return (
     <Link 
-    href={"/space/reserve/1"}
+    href={`/space/reserve/${spaceId}`}
     className="w-full bg-white flex items-center rounded-xl p-5">
       <div className="bg-gray-200 p-2 rounded-full grid place-items-center">
         <Image

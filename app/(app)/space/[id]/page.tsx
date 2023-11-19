@@ -36,14 +36,15 @@ export default function Space() {
 
  const { data } = useSWR<ReservableInt[][]>(`/reservable/getReservables/${spaceId}`, fetcher);
 
- console.log(data)
 
  useEffect(()=>{
-  if(data != undefined){
+  if(data != undefined && data != null && data.length != 0){
     setDia(data[0][0].init_date)
-  
+    setBotonSeleccionado(0)
   }
 },[data])
+
+
 if (data !== undefined && diaSeleccionado !== null) {
   // Mapear la primera fecha de cada grupo
   fechasPrimeros = data.map((grupo) => (grupo.length > 0 ? grupo[0].init_date : null));
@@ -120,7 +121,7 @@ if (data !== undefined && diaSeleccionado !== null) {
                       setDia(fecha);
                       setBotonSeleccionado(index);
                     }}
-                    className={`px-2 py-2 rounded-lg text-xl ${botonSeleccionado === index ? 'bg-blue-800 text-gray-50' : 'bg-gray-300 text-blue-800'}`}
+                    className={`px-2 py-2 rounded-lg text-xl ${botonSeleccionado === index ? 'bg-blue-800 text-gray-50 border-blue-800' : 'bg-white-300 text-blue-800 border-blue-800'}`}
                     style={{ width: '100%' }}
                   >
                     {formatearFecha(fecha)}
@@ -147,6 +148,11 @@ if (data !== undefined && diaSeleccionado !== null) {
                 teacher={reservable.coach}
                 available={true}
                 image='/samples/Avatar.png'
+                spaceId = {Number(spaceId)}
+                actualQuota={reservable.actualQuota}
+                quota={reservable.quota}
+                init_date={reservable.init_date}
+                end_date={reservable.end_date}
             />
               </div>
             ))
