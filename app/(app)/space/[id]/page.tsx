@@ -16,6 +16,8 @@ import "slick-carousel/slick/slick-theme.css";
 
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import { formatearFecha, formatearHora } from "@/utils/helpers";
+import Loader from "@/components/shared/Loader";
 
 type ReservableDateFormat = [string, ReservableInt[]];
 
@@ -39,43 +41,11 @@ export default function Space() {
     }
   }, [reservables]);
 
-  function formatearFecha(fecha: Date | null) {
-    const opcionesPorDefecto: Intl.DateTimeFormatOptions = {
-      weekday: "short",
-      month: "short",
-      day: "numeric",
-    };
+  
 
-    if (fecha != null) {
-      const fechaNew = new Date(fecha);
-      return fechaNew.toLocaleDateString("es-ES", opcionesPorDefecto);
-    } else {
-      return "Fecha inválida";
-    }
-  }
-
-  function formatearHora(fecha: Date | null) {
-    if (fecha != null) {
-      const fechaNew = new Date(fecha);
-      const horas = fechaNew.getHours();
-      const minutos = fechaNew.getMinutes();
-      const segundos = fechaNew.getSeconds();
-      const horaFormateada = `${agregarCeroDelante(horas)}:${agregarCeroDelante(
-        minutos
-      )}`;
-
-      return horaFormateada;
-    } else {
-      return "Fecha inválida";
-    }
-  }
-
-  function agregarCeroDelante(valor: number) {
-    return valor < 10 ? `0${valor}` : valor;
-  }
-
+ 
   if (!reservables) {
-    return <div>Loading...</div>;
+    return <Loader />
   }
 
   // Definimos el reservable seleccionado actualmente
@@ -119,6 +89,7 @@ export default function Space() {
             
               <Reservable
                 key={reser.id}
+                reservable={reser}
                 hour={formatearHora(new Date(reser.init_date))}
                 coach={reser?.admin?.name ?? ""}
                 image="/samples/Avatar.png"

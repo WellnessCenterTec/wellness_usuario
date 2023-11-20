@@ -1,6 +1,6 @@
 "use client";
 
-import { setSpaceName } from "@/redux/slices/reservasbleSlice";
+import { setSpaceName } from "@/redux/slices/reservableSlice";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";

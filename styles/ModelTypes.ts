@@ -33,7 +33,6 @@ export interface ReservableInt {
   id: number;
   spaceId:number
   adminId: number;
-  actualQuota: number;
   coach: AdminInt;
   end_date: string;
   init_date: string;
