@@ -10,15 +10,9 @@ import { useRouter } from 'next/router';
 import useSWR from "swr";
 import { fetcher } from "@/config/fetcher";
 import { ReservableInt } from '@/styles/ModelTypes';
-import { handleError } from "@/utils/errorHandler";
-import { axiosConfig } from "@/config/axiosConfig";
-import clienteAxios from "@/config/clienteAxios";
 
 
 import { usePathname, useSearchParams, useParams } from 'next/navigation'
-import { url } from 'inspector';
-import Spinner from '@/components/shared/Spinner';
-
 
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -42,8 +36,6 @@ export default function Space() {
   const [botonSeleccionado, setBotonSeleccionado] = useState<null | number>(null)
 
   const [spaceName, setSpaceName] = useState("")
-
-
 
  const { data } = useSWR<ReservableInt[][]>(`/reservable/getReservables/${spaceId}`, fetcher);
 
@@ -158,11 +150,14 @@ if (data !== undefined && diaSeleccionado !== null) {
              objetosConFechaSeleccionada.map((reservable, index) => (
               <div key={index} className='px-2'>
                 <Reservable 
+                reservableInt = {reservable.id}
                 hour= {formatearHora(reservable.init_date)}
                 teacher={reservable.coach}
+                teacherId={reservable.adminId}
                 available={true}
                 image='/samples/Avatar.png'
                 spaceId = {Number(spaceId)}
+                SpaceName = {spaceName}
                 actualQuota={reservable.actualQuota}
                 quota={reservable.quota}
                 init_date={reservable.init_date}
