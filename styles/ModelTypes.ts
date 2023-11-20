@@ -31,13 +31,20 @@ export interface SpaceInt {
 
 export interface ReservableInt {
   id: number;
+  spaceId:number
   adminId: number;
   actualQuota: number;
-  coach: string;
-  end_date: Date;
-  init_date: Date;
+  coach: AdminInt;
+  end_date: string;
+  init_date: string;
+  color:string
+  reservableGroup:string
   quota: number;
-  }
+  admin?:AdminInt
+  reservations?:ReservaInt[]
+}
+
+
   
   export interface ReservaInt {
   id: number;
