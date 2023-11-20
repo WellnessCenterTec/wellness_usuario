@@ -1,6 +1,6 @@
 "use client";
 
-import { setSpaceName } from "@/redux/slices/reservableSlice";
+import { setSpaceName } from "@/redux/slices/reservationSlice";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -44,7 +44,7 @@ export default function Space({ name, img, id }: Props) {
 
         <Link
           className="bg-blue-600 text-gray-50 px-2 py-1 rounded-lg text-lg absolute bottom-5"
-          href={`/space/${id}`}
+          href={`/space/${id}?name=${name}`}
           onClick ={() => handleSelectedSpace()}
         >
           Reservar

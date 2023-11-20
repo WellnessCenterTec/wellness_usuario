@@ -13,14 +13,24 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import Loader from "@/components/shared/Loader";
 import { formatearHora } from "@/utils/helpers";
+import { useParams, useSearchParams } from "next/navigation";
+import useSWR from "swr";
+import { fetcher } from "@/config/fetcher";
 
 
 
 export default function Reserve() {
-  const { reservable, spaceName } = useSelector(
-    (state: RootState) => state.reservable
-  );
- 
+  // Obtenemos el id del reservable
+  const {id} = useParams();
+  
+  // Obtenemos el nombre del reservable
+  const search = useSearchParams()
+  const spaceName = search.get("name")
+
+  // Obtenemos su estatus con SWR
+  const {data:reservable} = useSWR(`/reservable/getReservable/${id}`,fetcher)
+
+
   // Si no hay un reservable colocamos la carga
   if (!reservable) {
     return <Loader />
@@ -34,8 +44,6 @@ export default function Reserve() {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-
-    console.log("Funciona");
 
     try {
       const config = axiosConfig();

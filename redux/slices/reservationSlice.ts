@@ -2,8 +2,8 @@ import { ReservableInt } from "@/styles/ModelTypes";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 
-const reservableSlice = createSlice({
-    name:"reservable",
+const reservationSlice = createSlice({
+    name:"reservation",
     initialState:{
         spaceName: "",
         reservable: null as null | ReservableInt
@@ -21,8 +21,8 @@ const reservableSlice = createSlice({
     }
 })
 
-export const {setReservable,setSpaceName} = reservableSlice.actions;
+export const {setReservable,setSpaceName} = reservationSlice.actions;
 
 
 
-export default reservableSlice.reducer;
+export default reservationSlice.reducer;

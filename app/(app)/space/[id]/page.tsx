@@ -8,7 +8,7 @@ import useSWR from "swr";
 import { fetcher } from "@/config/fetcher";
 import { ReservableInt } from "@/styles/ModelTypes";
 
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -22,10 +22,11 @@ import Loader from "@/components/shared/Loader";
 type ReservableDateFormat = [string, ReservableInt[]];
 
 export default function Space() {
-  const {spaceName} = useSelector((state: RootState) => state.reservable);
 
-  const params = useParams();
-  const spaceId = params.id;
+
+  const {id:spaceId} = useParams();
+  const search = useSearchParams()
+  const spaceName = search.get("name")
 
   const { data: reservables } = useSWR<ReservableDateFormat[]>(
     `/reservable/getReservables/${spaceId}`,
@@ -89,7 +90,7 @@ export default function Space() {
             
               <Reservable
                 key={reser.id}
-                reservable={reser}
+                id={reser.id}
                 hour={formatearHora(new Date(reser.init_date))}
                 coach={reser?.admin?.name ?? ""}
                 image="/samples/Avatar.png"
