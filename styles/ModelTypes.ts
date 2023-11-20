@@ -7,7 +7,7 @@ export interface AdminInt {
 }
 
 export interface UserInt {
-  id:number
+  id: number;
   name: string;
   lastName: string;
   email: string;
@@ -26,29 +26,38 @@ export interface SpaceInt {
   quota: number;
   open_date: string;
   close_date: string;
+  materials_required: boolean;
+  materials: string[];
+  location:string
   open: boolean;
 }
 
+
+
+// También necesitarás definir las interfaces para Reservable, ClosedSpace y Admin, 
+// pero no puedo hacerlo sin conocer sus definiciones en el esquema Prisma.
+
 export interface ReservableInt {
   id: number;
-  spaceId:number
+  spaceId: number;
+  space?:SpaceInt
   adminId: number;
   coach: AdminInt;
   end_date: string;
   init_date: string;
-  color:string
-  reservableGroup:string
+  color: string;
+  reservableGroup: string;
   quota: number;
-  admin?:AdminInt
-  reservations?:ReservaInt[]
+  admin?: AdminInt;
+  reservations?: ReservaInt[];
 }
 
-
-  
-  export interface ReservaInt {
+export interface ReservaInt {
   id: number;
-  espacio: string;
-  ubicación: string;
-  fecha: Date;
-  hora: number;
-  }
+  reservableId: number;
+  reservable?: ReservableInt;
+  userId: number;
+
+  reservation_date: string;
+  status: string;
+}

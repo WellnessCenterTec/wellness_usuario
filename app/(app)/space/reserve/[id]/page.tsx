@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import Loader from "@/components/shared/Loader";
 import { formatearHora } from "@/utils/helpers";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import useSWR from "swr";
 import { fetcher } from "@/config/fetcher";
 
@@ -30,6 +30,7 @@ export default function Reserve() {
   // Obtenemos su estatus con SWR
   const {data:reservable} = useSWR(`/reservable/getReservable/${id}`,fetcher)
 
+  const router = useRouter()
 
   // Si no hay un reservable colocamos la carga
   if (!reservable) {
@@ -47,10 +48,26 @@ export default function Reserve() {
 
     try {
       const config = axiosConfig();
-
       if (!config) {
         throw new Error("Sesión vencida inicia sesion");
       }
+
+      // Creamos la reserva para el usuario
+      const { data } = await clienteAxios.post(
+        `/user/reserve/${id}`,
+        {},
+        config
+      );
+
+      // Si hubo exito mostramos la respuesta del servidor
+      await Swal.fire({
+        icon:"success",
+        title:data.msg
+      });
+
+      // Redirigimos a la pantalla de reservaciones
+      router.push("/reservaciones")
+
     } catch (error: any) {
       return handleError(error);
     }

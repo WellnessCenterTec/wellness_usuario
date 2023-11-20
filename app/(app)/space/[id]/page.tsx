@@ -37,7 +37,7 @@ export default function Space() {
 
   // En cuanto carguen los reservables colocamos el dia como el primero que salga
   useEffect(() => {
-    if (reservables) {
+    if (reservables && reservables.length > 0) {
       setDay(reservables[0][0]);
     }
   }, [reservables]);
