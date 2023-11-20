@@ -1,6 +1,6 @@
 "use client";
 
-import { setActualQuota, setEnd_date, setHour, setInit_date, setQuota, setSpaceId, setSpaceName, setTeacher, setTeacherId, setidReservable } from "@/redux/slices/indexSlice";
+
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -8,20 +8,13 @@ import React from "react";
 import { useDispatch } from "react-redux";
 
 interface Props {
-  reservableInt: number;
   hour: string;
   coach: string;
   image: string;
-  available: boolean;
   spaceId: number
-  SpaceName: string
-  actualQuota: number
-  quota: number
-  init_date: Date
-  end_date: Date
 }
 
-export default function Reservable({ hour, coach, image, available, spaceId, actualQuota, quota, init_date, end_date}: Props) {
+export default function Reservable({ hour, coach, image, spaceId}: Props) {
 
   return (
     <Link 

@@ -20,7 +20,7 @@ import { RootState } from "@/redux/store";
 type ReservableDateFormat = [string, ReservableInt[]];
 
 export default function Space() {
-  const space = useSelector((state: RootState) => state.index);
+  const {spaceName} = useSelector((state: RootState) => state.reservable);
 
   const params = useParams();
   const spaceId = params.id;
@@ -74,8 +74,6 @@ export default function Space() {
     return valor < 10 ? `0${valor}` : valor;
   }
 
-  console.log(reservables);
-
   if (!reservables) {
     return <div>Loading...</div>;
   }
@@ -85,7 +83,7 @@ export default function Space() {
 
   return (
     <div>
-      <PageHeader title={space.spaceName ?? ""} image="/samples/fondo.jpeg" />
+      <PageHeader title={spaceName ?? ""} image="/samples/fondo.jpeg" />
 
       <div className="flex-wrap gap-6 mt-4 mx-auto w-5/6">
         {reservables.length > 0 ? (
@@ -123,13 +121,10 @@ export default function Space() {
                 key={reser.id}
                 hour={formatearHora(new Date(reser.init_date))}
                 coach={reser?.admin?.name ?? ""}
-                available={true}
                 image="/samples/Avatar.png"
                 spaceId={Number(spaceId)}
-                actualQuota={reser.actualQuota}
-                quota={reser.quota}
-                init_date={new Date(reser.init_date)}
-                end_date={new Date(reser.end_date)}
+             
+          
               />
             
           ))}

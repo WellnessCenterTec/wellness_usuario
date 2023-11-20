@@ -1,11 +1,11 @@
 "use client";
 
+import { setSpaceName } from "@/redux/slices/reservasbleSlice";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { useDispatch } from "react-redux";
 
-import {setSpaceName} from "@/redux/slices/indexSlice";
 
 
 interface Props {

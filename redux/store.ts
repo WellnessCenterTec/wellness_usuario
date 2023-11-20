@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import AuthSlice from "./slices/authSlice";
-import indexSlice  from "./slices/indexSlice";
+import reservasbleSlice from "./slices/reservasbleSlice";
 
 
 
@@ -8,7 +8,7 @@ import indexSlice  from "./slices/indexSlice";
 const store = configureStore({
   reducer: {
     auth:AuthSlice,
-    index:indexSlice
+    reservable:reservasbleSlice
   },
 });
 export default store;
