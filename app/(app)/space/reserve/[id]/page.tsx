@@ -16,6 +16,7 @@ import { formatearHora } from "@/utils/helpers";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import useSWR from "swr";
 import { fetcher } from "@/config/fetcher";
+import { ReservableInt } from "@/styles/ModelTypes";
 
 
 
@@ -28,7 +29,7 @@ export default function Reserve() {
   const spaceName = search.get("name")
 
   // Obtenemos su estatus con SWR
-  const {data:reservable} = useSWR(`/reservable/getReservable/${id}`,fetcher)
+  const {data:reservable} = useSWR<ReservableInt>(`/reservable/getReservable/${id}`,fetcher)
 
   const router = useRouter()
 
@@ -87,7 +88,7 @@ export default function Reserve() {
         <div className="w-full">
           <Image
             className=" object-center object-cover rounded-md"
-            src="/samples/lateral.jpg"
+            src={reservable.space?.image ?? "/samples/fondo.jpeg"}
             width={400}
             height={400}
             alt="Imagen de fondo"

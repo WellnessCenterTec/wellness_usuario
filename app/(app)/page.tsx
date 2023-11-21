@@ -35,7 +35,7 @@ export default  function Index() {
         <div className="grid place-items-center gap-4 mt-6 mx-auto w-2/3">
           
           {data ? (
-              data.map((space) => <Space name={space.name} id = {space.id} img = "/samples/fondo.jpeg" />)
+              data.map((space) => <Space name={space.name} id = {space.id} img ={space.image} />)
             ) : (
               <Spinner />
             )}

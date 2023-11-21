@@ -28,7 +28,7 @@ export default function page() {
         {data ? (
           data.map((reserva) => (
             <Reservation
-              image="/samples/fondo.jpeg"
+              image={reserva.reservable?.space?.image ?? "/samples/fondo.jpeg"}
               date={formatearFecha(new Date(reserva.reservation_date))}
               location={reserva.reservable?.space?.location ?? ""}
               time={formatearHora(new Date(reserva.reservation_date))}

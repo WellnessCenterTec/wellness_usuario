@@ -1,14 +1,18 @@
 "use client";
 
 import Loader from "@/components/shared/Loader";
+import { fetcher } from "@/config/fetcher";
 import { RootState } from "@/redux/store";
 import { loadPerfil } from "@/redux/thunks/authThunk";
+import { AnnounceInt } from "@/styles/ModelTypes";
+import { formatearFecha } from "@/utils/helpers";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
+import useSWR from "swr";
 
 interface Props {
   children: React.ReactNode;
@@ -18,6 +22,7 @@ export default function layout({ children }: Props) {
   const { auth, cargando } = useSelector((state: RootState) => state.auth);
   const [menuIcon, setIcon] = useState(false);
   const [announcements, setAnnouncements] = useState(false)
+
 
   const dispatch = useDispatch<any>();
   const router = useRouter();
@@ -35,6 +40,9 @@ export default function layout({ children }: Props) {
       router.push("/login");
     }
   }, [cargando, auth, router]);
+
+  const {data:announces} = useSWR<AnnounceInt[]>("/announce",fetcher)
+
 
   if (cargando) {
     return (
@@ -71,18 +79,16 @@ export default function layout({ children }: Props) {
 
             <div className={`absolute top-10 right-5 bg-white z-40 p-4 w-56 h-36 space-y-2 overflow-y-auto ${announcements ? "":"hidden"}`}>
 
-              <div >
-                <p className="text-blue-700 font-bold text-sm">Torneo Relampago de Tochito</p>
-                <p className="text-gray-700 text-sm">10 de septiembre de 2023</p>
+              {announces && announces.map((announce=>(
+
+              <div 
+                key={announce.id}
+              >
+                <p className="text-blue-700 font-bold text-sm capitalize">{announce.title}</p>
+                <p className="text-gray-700 text-sm capitalize">{formatearFecha(new Date(announce.event_date))}</p>
               </div>
-              <div >
-                <p className="text-blue-700 font-bold text-sm">Torneo Relampago de Tochito</p>
-                <p className="text-gray-700 text-sm">10 de septiembre de 2023</p>
-              </div>
-              <div >
-                <p className="text-blue-700 font-bold text-sm">Torneo Relampago de Tochito</p>
-                <p className="text-gray-700 text-sm">10 de septiembre de 2023</p>
-              </div>
+              )))} 
+              
 
             </div>
 

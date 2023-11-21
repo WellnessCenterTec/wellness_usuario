@@ -30,6 +30,7 @@ export interface SpaceInt {
   materials: string[];
   location:string
   open: boolean;
+  image:string
 }
 
 
@@ -60,4 +61,12 @@ export interface ReservaInt {
 
   reservation_date: string;
   status: string;
+}
+
+export interface AnnounceInt {
+  id: number;
+  title: string;
+  init_date: string;
+  end_date: string;
+  event_date: string;
 }
