@@ -2,34 +2,31 @@
 
 import clienteAxios from "@/config/clienteAxios";
 import Image from "next/image";
-import React, { useState } from "react";
-
-import jsCookie from "js-cookie"
-import { useDispatch } from "react-redux";
-import { setAuth } from "@/redux/slices/authSlice";
-import { useRouter } from "next/navigation";
-import { handleError } from "@/utils/errorHandler";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import jsCookie from "js-cookie";
+import { setAuth } from "@/redux/slices/authSlice";
+import { handleError } from "@/utils/errorHandler";
 
+export default function page() {
+  const [registration, setRegistration] = useState("");
+  const [password, setPassword] = useState("");
 
-export default function Login() {
+  const dispatch = useDispatch();
+  const router = useRouter();
 
-  const [registration, setRegistration] = useState("")
-  const [password, setPassword] = useState("")
-
-  const dispatch = useDispatch()
-  const router = useRouter()
-
-  const handleSubmit = async (e:any)=>{
-    e.preventDefault()
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
 
     try {
-      
       // Hacemos la peticion
 
-      const {data} = await clienteAxios.post("/user/login",{
-        registration, password
-      })
+      const { data } = await clienteAxios.post("/user/create", {
+        registration,
+        password,
+      });
 
       // Colocamos la cookie
 
@@ -39,15 +36,14 @@ export default function Login() {
 
       // Guardamos la autenticacion
 
-      dispatch(setAuth(data))
+      dispatch(setAuth(data));
 
       // Mandamos a la pantalla
-      router.push("/")
-
-    } catch (error:any) {
-      return handleError(error)
+      router.push("/");
+    } catch (error: any) {
+      return handleError(error);
     }
-  }
+  };
 
   return (
     <form 
@@ -81,42 +77,36 @@ export default function Login() {
           <div className="grid place-items-center gap-4 w-full">
             <div className="border-b-2 border-white w-2/3">
               <p className="text-gray-50">Matricula</p>
-              <input 
-              
-              className="bg-transparent text-white py-1 rounded-md w-full"
-              type="text"
-              placeholder="A000000000"
-              onChange={(e)=>setRegistration(e.target.value)}
-              value={registration}
+              <input
+                className="bg-transparent text-white py-1 rounded-md w-full"
+                type="text"
+                placeholder="A00000000"
+                onChange={(e) => setRegistration(e.target.value)}
+                value={registration}
               />
             </div>
 
             <div className="border-b-2 border-white w-2/3">
-              <input 
-              className="bg-transparent text-white py-1 rounded-md w-full"
-              type="password" 
-              placeholder="Contraseña"
-              onChange={(e)=>setPassword(e.target.value)}
-              value={password}
+              <input
+                className="bg-transparent text-white py-1 rounded-md w-full"
+                type="password"
+                placeholder="Contraseña"
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
               />
             </div>
 
             <div>
-              <Link 
-              className="text-gray-50"
-              href="/register"
-              >
-                
-                ¿No tienes cuenta? Registrate
-
+              <Link className="text-gray-50" href="/login">
+                ¿Ya tienes cuenta? Inicia Sesión
               </Link>
             </div>
 
-
-            <input 
-            className="inline-block bg-blue-700 rounded-lg px-4 py-2 text-lg text-gray-50 capitalize mt-8"
-            type="submit" 
-            value="iniciar Sesion" />
+            <input
+              className="inline-block bg-blue-700 rounded-lg px-4 py-2 text-lg text-gray-50 capitalize mt-8"
+              type="submit"
+              value="Registrarse"
+            />
           </div>
         </div>
       </div>

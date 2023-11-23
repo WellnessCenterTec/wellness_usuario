@@ -1,6 +1,7 @@
 import '@/styles/globals.css'
 import { Metadata } from "next";
 import ReduxProvider from "@/redux/ReduxProvider";
+import { NextUIProvider } from '@nextui-org/react';
 
 
 interface RootProps {
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: RootProps) {
         />
       </head>
       <ReduxProvider>
+    
         <body
           className='max-w-xl mx-auto'
         >{children}</body>

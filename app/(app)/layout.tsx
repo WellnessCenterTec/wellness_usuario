@@ -6,6 +6,7 @@ import { RootState } from "@/redux/store";
 import { loadPerfil } from "@/redux/thunks/authThunk";
 import { AnnounceInt } from "@/styles/ModelTypes";
 import { formatearFecha } from "@/utils/helpers";
+import { NextUIProvider } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -51,7 +52,7 @@ export default function layout({ children }: Props) {
   }
 
   return (
-    <>
+    <NextUIProvider>
       <div className=" w-full border-black-200 bg-gray-50">
         <div className="flex flex-wrap items-center justify-between mx-auto p-4">
           <Link href="/#" className="flex items-center">
@@ -113,7 +114,7 @@ export default function layout({ children }: Props) {
       />
 
       <main className="bg-gray-100 min-h-screen">{children}</main>
-    </>
+    </NextUIProvider>
   );
 }
 

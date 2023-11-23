@@ -9,8 +9,6 @@ export interface AdminInt {
 export interface UserInt {
   id: number;
   name: string;
-  lastName: string;
-  email: string;
   password: string;
   registration: string;
   gender: string;
