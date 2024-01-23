@@ -8,6 +8,7 @@ export function axiosConfig(json:boolean = true){
         headers: {
         "Content-Type": json ? "application/json" : "multipart/form-data",
         Authorization: `Bearer ${token}`,
+        "ngrok-skip-browser-warning":true
         },
     };
     return config
