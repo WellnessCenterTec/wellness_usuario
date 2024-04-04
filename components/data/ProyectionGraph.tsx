@@ -31,7 +31,6 @@ interface CustomBarProps extends BarProps {
 }
 
 const CustomBar = (props:any ) => {
-    console.log(props)
     const { fill, x, y, width, height, payload } = props;
   
     // Cambiar el color a gris si projection es true

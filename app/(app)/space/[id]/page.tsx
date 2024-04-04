@@ -16,7 +16,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { formatearFecha, formatearHora } from "@/utils/helpers";
+import { formatearFecha, formatearHora, generarIdUnico } from "@/utils/helpers";
 import Loader from "@/components/shared/Loader";
 
 type ReservableDateFormat = [string, ReservableInt[]];
@@ -42,6 +42,7 @@ export default function Space() {
     }
   }, [reservables]);
 
+  console.log(reservables)
   
 
  
@@ -58,9 +59,9 @@ export default function Space() {
 
       <div className="flex-wrap gap-6 mt-4 mx-auto w-5/6">
         {reservables.length > 0 ? (
-          <Slider slidesToShow={3} slidesToScroll={1}>
+          <div className="flex items-center gap-4">
             {reservables.map((element, index) => (
-              <div key={index} className="px-2">
+              <div key={generarIdUnico()} className="px-2">
                 <button
                   type="button"
                   onClick={() => {
@@ -76,7 +77,7 @@ export default function Space() {
                 </button>
               </div>
             ))}
-          </Slider>
+          </div>
         ) : (
           <p>No hay fechas disponibles.</p>
         )}

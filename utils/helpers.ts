@@ -33,3 +33,9 @@ export function formatearFecha(fecha: Date | null) {
       return "Fecha inválida";
     }
   }
+
+  export function generarIdUnico() {
+    const timestamp = Date.now().toString(36); // Convertir la fecha actual a base 36
+    const aleatorio = Math.random().toString(36).slice(2, 8); // Generar un número aleatorio en base 36 y tomar solo los primeros 6 caracteres
+    return `${timestamp}-${aleatorio}`; // Unir ambos valores con un guión para formar el ID único
+  }

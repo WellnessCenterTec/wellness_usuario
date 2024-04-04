@@ -34,7 +34,7 @@ const renderCustomizedLabel = ({
       textAnchor={x > cx ? "start" : "end"}
       dominantBaseline="central"
     >
-      {total*percent}
+      {Math.round(total*percent)}
     
     </text>
   );
