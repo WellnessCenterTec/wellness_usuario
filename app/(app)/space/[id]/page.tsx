@@ -50,7 +50,6 @@ export default function Space() {
   return (
     <div>
       <PageHeader title={spaceName ?? ""} image="/samples/fondo.jpeg" />
-
       <div className="flex-wrap gap-6 mt-4 mx-auto w-5/6">
         {reservables.length > 0 ? (
           <div className="flex items-center gap-4">
