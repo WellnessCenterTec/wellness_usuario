@@ -94,7 +94,7 @@ export default function Space() {
                 id={reser.id}
                 hour={formatearHora(new Date(reser.init_date))}
                 coach={reser?.admin?.name ?? ""}
-                image="/samples/Avatar.png"
+                image="/borregoBlue.png"
                 spaceId={Number(spaceId)}
              
           
