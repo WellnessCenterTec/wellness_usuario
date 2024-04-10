@@ -39,7 +39,7 @@ export default function Reservable({
           src={image}
           width={50}
           height={50}
-          className="rounded-full"
+          className="rounded-full bg-blue-400"
           alt="Avatar"
         />
       </div>
