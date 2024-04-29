@@ -80,7 +80,7 @@ export default function layout({ children }: Props) {
 
             <div className={`absolute top-10 right-5 bg-white z-40 p-4 w-56 h-36 space-y-2 overflow-y-auto ${announcements ? "":"hidden"}`}>
 
-              {announces && announces.map((announce=>(
+              {announces && announces.length > 0 ? announces.map((announce=>(
 
               <div 
                 key={announce.id}
@@ -88,7 +88,11 @@ export default function layout({ children }: Props) {
                 <p className="text-blue-700 font-bold text-sm capitalize">{announce.title}</p>
                 <p className="text-gray-700 text-sm capitalize">{formatearFecha(new Date(announce.event_date))}</p>
               </div>
-              )))} 
+              ))) : (
+                <div className="w-full mt-10">
+                  <p className="text-blue-700 text-sm text-center font-bold">No hay anuncios disponibles</p>
+                </div>
+              )} 
               
 
             </div>

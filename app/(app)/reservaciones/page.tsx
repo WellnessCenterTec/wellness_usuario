@@ -18,7 +18,7 @@ import { formatearFecha, formatearHora } from "@/utils/helpers";
 export default function page() {
   const user = useSelector((state: RootState) => state.auth);
 
-  const { data } = useSWR<ReservaInt[]>("/user/reserves", fetcher);
+  const { data } = useSWR<ReservaInt[]>("/reservation/reserves", fetcher);
 
   return (
     <div>
