@@ -39,7 +39,7 @@ export default function page() {
       dispatch(setAuth(data));
 
       // Mandamos a la pantalla
-      router.push("/");
+      window.location.href = "/";
     } catch (error: any) {
       return handleError(error);
     }

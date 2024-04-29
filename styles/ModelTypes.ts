@@ -49,6 +49,7 @@ export interface ReservableInt {
   quota: number;
   admin?: AdminInt;
   reservations?: ReservaInt[];
+  onlineQuotaString: string;
 }
 
 export interface ReservaInt {

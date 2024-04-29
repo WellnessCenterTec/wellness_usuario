@@ -29,7 +29,10 @@ export default function Reserve() {
   const spaceName = search.get("name")
 
   // Obtenemos su estatus con SWR
-  const {data:reservable} = useSWR<ReservableInt>(`/reservable/getReservable/${id}`,fetcher)
+  const {data:reservable} = useSWR<ReservableInt>(`/reservable/getReservable/${id}`,fetcher,{
+    refreshInterval: 3000
+  })
+
 
   const router = useRouter()
 
@@ -55,7 +58,7 @@ export default function Reserve() {
 
       // Creamos la reserva para el usuario
       const { data } = await clienteAxios.post(
-        `/user/reserve/${id}`,
+        `/reservation/reserve/${id}`,
         {},
         config
       );
@@ -107,7 +110,7 @@ export default function Reserve() {
           <div className="rounded-xl p-3 ring-1 ring-blue-800 mt-6">
             <p className="text-center">Ocupación</p>
             <p className="text-center text-blue-800 font-bold text-2xl">
-              {fillQuota} / {quota}
+              {reservable.onlineQuotaString}
             </p>
           </div>
 

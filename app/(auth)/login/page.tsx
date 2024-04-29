@@ -41,8 +41,9 @@ export default function Login() {
 
       dispatch(setAuth(data))
 
-      // Mandamos a la pantalla
-      router.push("/")
+      // Mandamos a la pantalla principal con window
+      window.location.href = "/"
+      
 
     } catch (error:any) {
       return handleError(error)
