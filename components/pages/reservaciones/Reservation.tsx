@@ -1,7 +1,13 @@
+import { axiosConfig } from "@/config/axiosConfig";
+import clienteAxios from "@/config/clienteAxios";
+import { handleError } from "@/utils/errorHandler";
 import Image from "next/image";
 import React from "react";
+import Swal from "sweetalert2";
+import { mutate } from "swr";
 
 interface Props {
+  id:number
   image: string;
   title: string;
   location: string;
@@ -9,7 +15,25 @@ interface Props {
   time:string
 }
 
-export default function Reservation({ image, title, location, date,time }: Props) {
+export default function Reservation({ id,image, title, location, date,time }: Props) {
+
+  async function handleDeleteReservation(){
+    try {
+      const config = axiosConfig();
+      if(!config) return;
+      const {data} = await clienteAxios.delete(`/reservation/delete/${id}`,config);
+      mutate("/reservation/reserves")
+      await Swal.fire({
+        icon: "success",
+        title: "Reservación eliminada",
+        text: data.message,
+      });
+
+    } catch (error:any) {
+      return handleError(error);
+    }
+  }
+
   return (
     <div className="flex items-center gap-3 bg-white rounded-xl relative">
       <Image
@@ -38,6 +62,7 @@ export default function Reservation({ image, title, location, date,time }: Props
       <button
         type="button"
         className="absolute bottom-3 right-3 fa-solid fa-trash text-blue-600"
+        onClick={handleDeleteReservation}
       >
 
       </button>
