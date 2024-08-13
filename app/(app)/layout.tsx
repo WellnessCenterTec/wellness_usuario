@@ -158,6 +158,22 @@ function MobileNavigation({
               Reservaciones
             </Link>
           </li>
+          <li
+            onClick={handleSmallerScreensNavigation}
+            className="py-10 px-4 hover:text-[#CEFF00] cursor-pointer"
+          >
+            <Link href="https://sites.google.com/tec.mx/intramurosrecsports/inicio" target="_blank" className="text-white">
+              Intramuros
+            </Link>
+          </li>
+          <li
+            onClick={handleSmallerScreensNavigation}
+            className="py-10 px-4 hover:text-[#CEFF00] cursor-pointer"
+          >
+            <Link href="https://eventos.tec.mx/s/lt-event?language=es_MX&id=a5u8X000002EqqfQAC" target="_blank" className="text-white">
+              Lockers
+            </Link>
+          </li>
         </ul>
       </div>
     </div>
