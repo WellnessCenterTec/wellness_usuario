@@ -2,7 +2,7 @@
 
 import Reservation from "@/components/pages/reservaciones/Reservation";
 import PageHeader from "@/components/shared/PageHeader";
-import React from "react";
+import React, { useState } from "react";
 
 import { ReservaInt, ReservableInt } from "@/styles/ModelTypes";
 import { handleError } from "@/utils/errorHandler";
@@ -14,11 +14,13 @@ import Spinner from "@/components/shared/Spinner";
 import useSWR from "swr";
 import { fetcher } from "@/config/fetcher";
 import { formatearFecha, formatearHora } from "@/utils/helpers";
+import { QRModal } from "./QRModal";
 
 export default function page() {
-  const user = useSelector((state: RootState) => state.auth);
-
   const { data } = useSWR<ReservaInt[]>("/reservation/reserves", fetcher);
+
+  const [selectedReserve, setSelectedReserve] = useState<ReservaInt | null>(null)
+  const [activeQR, setActiveQR] = useState(false)
 
   return (
     <div>
@@ -27,19 +29,33 @@ export default function page() {
       <div className="mt-6 mx-4 space-y-3">
         {data ? (
           data.map((reserva) => (
-            <Reservation
-            id={reserva.id}
-              image={reserva.reservable?.space?.image ?? "/samples/fondo.jpeg"}
-              date={formatearFecha(new Date(reserva.reservation_date))}
-              location={reserva.reservable?.space?.location ?? ""}
-              time={formatearHora(new Date(reserva.reservation_date))}
-              title={reserva.reservable?.space?.name ?? ""}
-            />
+            
+              <Reservation
+                id={reserva.id}
+                image={
+                  reserva.reservable?.space?.image ?? "/samples/fondo.jpeg"
+                }
+                date={formatearFecha(new Date(reserva.reservation_date))}
+                location={reserva.reservable?.space?.location ?? ""}
+                time={formatearHora(new Date(reserva.reservation_date))}
+                title={reserva.reservable?.space?.name ?? ""}
+                onClick={()=>{
+                   setSelectedReserve(reserva)
+                    setActiveQR(true)
+                }}
+              />
+           
           ))
         ) : (
           <Spinner />
         )}
       </div>
+      {selectedReserve && (
+
+        <QRModal active={activeQR} setActive={(value) => {
+          setActiveQR(value)
+        }} reserva={selectedReserve} />
+      )}
     </div>
   );
 }
