@@ -13,9 +13,10 @@ interface Props {
   location: string;
   date: string;
   time:string
+  onClick : ()=>void
 }
 
-export default function Reservation({ id,image, title, location, date,time }: Props) {
+export default function Reservation({ id,image, title, location, date,time,onClick }: Props) {
 
   async function handleDeleteReservation(){
     try {
@@ -35,7 +36,7 @@ export default function Reservation({ id,image, title, location, date,time }: Pr
   }
 
   return (
-    <div className="flex items-center gap-3 bg-white rounded-xl relative">
+    <button type="button" onClick={onClick} className="flex items-center gap-3 bg-white rounded-xl relative">
       <Image
         src={image}
         width={200}
@@ -66,6 +67,6 @@ export default function Reservation({ id,image, title, location, date,time }: Pr
       >
 
       </button>
-    </div>
+    </button>
   );
 }

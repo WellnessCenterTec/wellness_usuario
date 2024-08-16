@@ -8,13 +8,8 @@ import useSWR from "swr";
 import { fetcher } from "@/config/fetcher";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { useDispatch } from "react-redux";
 import { SpaceInt } from "@/styles/ModelTypes";
 
-
-import { handleError } from "@/utils/errorHandler";
-import { axiosConfig } from "@/config/axiosConfig";
-import clienteAxios from "@/config/clienteAxios";
 
 import Spinner from "@/components/shared/Spinner";
 import { ProyectionGraphData } from "@/styles/AppTypes";
