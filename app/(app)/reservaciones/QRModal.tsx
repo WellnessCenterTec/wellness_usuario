@@ -14,7 +14,7 @@ export function QRModal({className,reserva,...props}:QRModalProps) {
 
   const {auth} = useSelector((state: RootState) => state.auth);
 
-  const qrValue = `${reserva.id}-${auth?.id}`
+  const qrValue = `${process.env.ADMIN_URL}/readqr?id=${reserva.id}`
 
   
   return (
