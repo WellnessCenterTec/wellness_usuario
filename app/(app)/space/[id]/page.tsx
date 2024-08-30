@@ -42,7 +42,6 @@ export default function Space() {
     }
   }, [reservables]);
 
-  console.log(reservables)
   
 
  
@@ -91,10 +90,9 @@ export default function Space() {
               <Reservable
                 key={reser.id}
                 id={reser.id}
-                hour={formatearHora(new Date(reser.init_date))}
-                coach={reser?.admin?.name ?? ""}
                 image="/borregoBlue.png"
-                spaceId={Number(spaceId)}
+                
+                reservable={reser}
              
           
               />
