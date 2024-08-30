@@ -57,7 +57,7 @@ export default function Space() {
       <PageHeader title={spaceName ?? ""} image="/samples/fondo.jpeg" />
       <div className="flex-wrap gap-6 mt-4 mx-auto w-5/6">
         {reservables.length > 0 ? (
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 overflow-auto">
             {reservables.map((element, index) => (
               <div key={generarIdUnico()} className="px-2">
                 <button
