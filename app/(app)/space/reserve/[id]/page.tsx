@@ -17,35 +17,37 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import useSWR from "swr";
 import { fetcher } from "@/config/fetcher";
 import { ReservableInt } from "@/styles/ModelTypes";
-
-
+import { DateTime } from "luxon";
 
 export default function Reserve() {
   // Obtenemos el id del reservable
-  const {id} = useParams();
-  
+  const { id } = useParams();
+
   // Obtenemos el nombre del reservable
-  const search = useSearchParams()
-  const spaceName = search.get("name")
+  const search = useSearchParams();
+  const spaceName = search.get("name");
 
   // Obtenemos su estatus con SWR
-  const {data:reservable} = useSWR<ReservableInt>(`/reservable/getReservable/${id}`,fetcher,{
-    refreshInterval: 3000
-  })
+  const { data: reservable } = useSWR<ReservableInt>(
+    `/reservable/getReservable/${id}`,
+    fetcher,
+    {
+      refreshInterval: 3000,
+    }
+  );
 
-
-  const router = useRouter()
+  const router = useRouter();
 
   // Si no hay un reservable colocamos la carga
   if (!reservable) {
-    return <Loader />
+    return <Loader />;
   }
 
   // Ya que sabemos que si hay una reservable extraemos las variables
 
-  const {quota,init_date,end_date,admin,reservations} = reservable
+  const { quota, init_date, end_date, admin, reservations } = reservable;
 
-  const fillQuota = reservations?.length ?? 0
+  const fillQuota = reservations?.length ?? 0;
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -57,33 +59,43 @@ export default function Reserve() {
       }
 
       // Creamos la reserva para el usuario
-      const { data } = await clienteAxios.post(
+      const { data, status } = await clienteAxios.post(
         `/reservation/reserve/${id}`,
         {},
         config
       );
 
+      if (status !== 200) {
+        await Swal.fire({
+          icon: "error",
+          title: data.msg,
+        });
+      }
+
       // Si hubo exito mostramos la respuesta del servidor
       await Swal.fire({
-        icon:"success",
-        title:data.msg
+        icon: "success",
+        title: data.msg,
       });
 
       // Redirigimos a la pantalla de reservaciones
-      router.push("/reservaciones")
-
+      router.push("/reservaciones");
     } catch (error: any) {
       return handleError(error);
     }
   };
 
- 
+  const reservableDate = DateTime.fromISO(init_date)
+    .plus({ minutes: 5 })
+    .toJSDate();
+  const currentDate = DateTime.now().toJSDate();
+  const shouldDisable =
+    currentDate > reservableDate ||
+    DateTime.now().plus({ day: 1 }).toJSDate() <= reservableDate;
 
   return (
     <div>
       <div className="flex items-center mx-4 pt-3">
-       
-
         <p className="text-2xl flex-1 text-center font-bold">{spaceName} </p>
       </div>
 
@@ -103,7 +115,8 @@ export default function Reserve() {
             <p className="text-center text-gray-100">Horario</p>
             <p className="text-gray-50 font-bold">
               {" "}
-              {formatearHora(new Date(init_date))} - {formatearHora(new Date(end_date))}{" "}
+              {formatearHora(new Date(init_date))} -{" "}
+              {formatearHora(new Date(end_date))}{" "}
             </p>
           </div>
 
@@ -125,7 +138,11 @@ export default function Reserve() {
       <div className="w-full grid place-items-center mt-5">
         <button
           type="button"
-          className="bg-blue-800 rounded-2xl px-5 py-2 font-bold text-gray-50 text-2xl"
+          className={`${
+            shouldDisable
+              ? "bg-gray-300 text-gray-600"
+              : "bg-blue-800 text-gray-50"
+          } rounded-2xl px-5 py-2 font-bold  text-2xl`}
           onClick={handleSubmit}
         >
           Reservar
