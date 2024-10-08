@@ -66,7 +66,7 @@ export default function Space() {
                       : "bg-white-300 text-blue-800 border-blue-800"
                   }`}
                 >
-                  {formatearFecha(new Date(element[0]))}
+                  {formatearFecha(DateTime.fromISO(element[0]).toJSDate())}
                 </button>
               </div>
             ))}
