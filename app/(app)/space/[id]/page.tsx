@@ -18,15 +18,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { formatearFecha, formatearHora, generarIdUnico } from "@/utils/helpers";
 import Loader from "@/components/shared/Loader";
+import { DateTime } from "luxon";
 
 type ReservableDateFormat = [string, ReservableInt[]];
 
 export default function Space() {
-
-
-  const {id:spaceId} = useParams();
-  const search = useSearchParams()
-  const spaceName = search.get("name")
+  const { id: spaceId } = useParams();
+  const search = useSearchParams();
+  const spaceName = search.get("name");
 
   const { data: reservables } = useSWR<ReservableDateFormat[]>(
     `/reservable/getReservables/${spaceId}`,
@@ -42,16 +41,12 @@ export default function Space() {
     }
   }, [reservables]);
 
-  
-
- 
   if (!reservables) {
-    return <Loader />
+    return <Loader />;
   }
 
   // Definimos el reservable seleccionado actualmente
   const selectedReservable = reservables.find((res) => res[0] === day);
-
   return (
     <div>
       <PageHeader title={spaceName ?? ""} image="/samples/fondo.jpeg" />
@@ -71,7 +66,7 @@ export default function Space() {
                       : "bg-white-300 text-blue-800 border-blue-800"
                   }`}
                 >
-                  {formatearFecha(new Date(element[0]))}
+                  {formatearFecha(DateTime.fromISO(element[0]).toJSDate())}
                 </button>
               </div>
             ))}
@@ -85,21 +80,16 @@ export default function Space() {
 
       <div className="mx-auto w-5/6 mt-3 grid place-items-center gap-4">
         {selectedReservable &&
-          selectedReservable[1].map((reser) => (
-            
+          selectedReservable[1].map((reser) => {
+            return (
               <Reservable
                 key={reser.id}
                 id={reser.id}
                 image="/borregoBlue.png"
-                
                 reservable={reser}
-             
-          
               />
-            
-          ))}
-
-        
+            );
+          })}
       </div>
     </div>
   );

@@ -24,26 +24,50 @@ export default  function Index() {
 
   const { data } = useSWR<SpaceInt[]>(`/user/getSpaces`, fetcher);
   const { auth } = useSelector((state: RootState) => state.auth);
+  const { data: liveStatus } = useSWR("/space/liveStatus", fetcher);
+
 
   return (
     <div className="">
       <PageHeader title={`Wellness Center`} image={"/images/borregos.jpg"} />
 
-      <div>
-      
-      <p className='text-center font-bold text-2xl my-8'>Afluencia del Gimnasio en tiempo real</p>
-      <div>
-        <CircleGraph />
-      </div>
-      <p className='text-center font-bold text-2xl my-8'>Afluencia del Gimnasio por hora</p>
-      <div className=' mx-auto'>
-        {hourStatus && (
+      <div className="">
+        <div>
+        <p className='text-center font-bold text-2xl my-8'>Afluencia del Gimnasio en tiempo real</p>
+        <div className="flex flex-col md:flex-row items-center justify-center">
+          <div className="w-full md:w-1/3">
+            <CircleGraph />
+          </div>
 
-        <ProyectionGraph
-          data={hourStatus}
-        />
-        )}
+          {liveStatus && (
+            <div className="flex flex-col items-start gap-3 mx-3 md:ml-2">
+              <div className="flex items-center gap-2">
+                <div className={`w-8 h-8 rounded-md bg-[#F43F5E]`}></div>
+                <p className="text-2xl">Lleno</p>
+                <p className="text-2xl">{liveStatus[0].value}</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className={`w-8 h-8 rounded-md bg-[#60A5FA]`}></div>
+                <p className="text-2xl">Disponible</p>
+                <p className="text-2xl">{liveStatus[1].value}</p>
+              </div>
+            </div>
+          )}
+        </div>
+        
+        <p className='text-center font-bold text-2xl my-8'>Afluencia del Gimnasio por hora</p>
+        <div className=' mx-auto'>
+          {hourStatus && (
+
+          <ProyectionGraph
+            data={hourStatus}
+          />
+          )}
+        </div>
+
+
       </div>
+
 
     </div>
 
