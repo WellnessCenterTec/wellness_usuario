@@ -22,10 +22,17 @@ export default  function Index() {
 
   const {data:hourStatus} = useSWR<ProyectionGraphData[]>("/space/wellnessAttendances",fetcher)
 
-  const { data } = useSWR<SpaceInt[]>(`/user/getSpaces`, fetcher);
   const { auth } = useSelector((state: RootState) => state.auth);
+  const { data } = useSWR<SpaceInt[] | {msg: string}>(`/user/getSpaces/${auth?.id}`, fetcher);
   const { data: liveStatus } = useSWR("/space/liveStatus", fetcher);
 
+  if (!data || !liveStatus || !hourStatus) {
+    return <Spinner />;
+  }
+
+  if (!Array.isArray(data) && data.msg) {
+    return <p className="text-black text-2xl text-center my-auto p-4">{data.msg}.</p>;    
+  }
 
   return (
     <div className="">
@@ -75,11 +82,8 @@ export default  function Index() {
         <p className="text-blue-800 text-2xl font-bold ml-8 ">Servicios</p>
 
         <div className="grid place-items-center gap-4 mt-6 mx-auto w-2/3">
-          
-          {data ? (
+          {Array.isArray(data) && (
               data.map((space) => <Space name={space.name} id = {space.id} img ={space.image} />)
-            ) : (
-              <Spinner />
             )}
 
         </div>

@@ -117,7 +117,7 @@ export default function layout({ children }: Props) {
         handleSmallerScreensNavigation={handleSmallerScreensNavigation}
       />
 
-      <main className="bg-gray-100 min-h-screen">{children}</main>
+      <main className="bg-gray-100 min-h-screen flex flex-col">{children}</main>
     </NextUIProvider>
   );
 }
