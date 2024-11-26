@@ -69,3 +69,12 @@ export interface AnnounceInt {
   end_date: string;
   event_date: string;
 }
+
+
+export interface CarouselImageInt {
+  id: number;
+  url: string;
+  image_id: string;
+  order: number;
+  createdAt: Date;
+}
