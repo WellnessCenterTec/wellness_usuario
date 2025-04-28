@@ -82,7 +82,7 @@ export default function layout({ children }: Props) {
 
               {announces && announces.length > 0 ? announces.map((announce=>(
 
-              <div 
+              <div
                 key={announce.id}
               >
                 <p className="text-blue-700 font-bold text-sm capitalize">{announce.title}</p>
@@ -92,8 +92,8 @@ export default function layout({ children }: Props) {
                 <div className="w-full mt-10">
                   <p className="text-blue-700 text-sm text-center font-bold">No hay anuncios disponibles</p>
                 </div>
-              )} 
-              
+              )}
+
 
             </div>
 
@@ -156,6 +156,14 @@ function MobileNavigation({
           >
             <Link href="/reservaciones" className="text-white">
               Reservaciones
+            </Link>
+          </li>
+          <li
+            onClick={handleSmallerScreensNavigation}
+            className="py-10 px-4 hover:text-[#CEFF00] cursor-pointer"
+          >
+            <Link href="/prestamos" className="text-white">
+              Préstamos
             </Link>
           </li>
           <li
