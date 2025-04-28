@@ -33,7 +33,7 @@ export interface SpaceInt {
 
 
 
-// También necesitarás definir las interfaces para Reservable, ClosedSpace y Admin, 
+// También necesitarás definir las interfaces para Reservable, ClosedSpace y Admin,
 // pero no puedo hacerlo sin conocer sus definiciones en el esquema Prisma.
 
 export interface ReservableInt {
@@ -70,11 +70,43 @@ export interface AnnounceInt {
   event_date: string;
 }
 
-
-export interface CarouselImageInt {
+export interface MaterialInt {
   id: number;
-  url: string;
-  image_id: string;
-  order: number;
+  name: string;
+  image?: string;
+  image_id?: string;
+  quantity: number;
+  minMatriculas: number;
+  leadTimeDays: number;
+  rules: string;
+  replacementCost: number;
+  deleted: boolean;
   createdAt: Date;
+}
+
+export interface LoanInt {
+  id: number;
+  materialId: number;
+  responsibleId: string;   // matrícula del responsable
+  studentIds: string[];    // lista de matrículas involucradas
+  quantity: number;
+  pickupDate: Date;        // fecha programada para recoger
+  returnDate: Date;        // fecha programada para devolver
+  actualReturnDate?: Date; // fecha real de devolución
+  pickupTime: string;      // horario de recolección: "7:00–9:00" o "14:00–16:00"
+  returnTime: string;      // horario de devolución
+  status: LoanStatus;
+  createdAt: Date;
+  penaltyApplied: boolean; // indica si se aplicó una penalización
+  penaltyNotes?: string;   // notas sobre la penalización
+  material?: MaterialInt;
+}
+
+export enum LoanStatus {
+  PENDING = "PENDING",           // solicitud pendiente de aprobación
+  AWAITING_PICKUP = "AWAITING_PICKUP",   // aprobado, esperando que el estudiante recoja
+  ON_LOAN = "ON_LOAN",           // material en manos del usuario
+  LATE = "LATE",              // material no devuelto a tiempo
+  LOST = "LOST",              // material perdido o dañado
+  RETURNED = "RETURNED"       // material devuelto (estado final)
 }
