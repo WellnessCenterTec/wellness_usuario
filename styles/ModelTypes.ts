@@ -33,9 +33,6 @@ export interface SpaceInt {
 
 
 
-// También necesitarás definir las interfaces para Reservable, ClosedSpace y Admin,
-// pero no puedo hacerlo sin conocer sus definiciones en el esquema Prisma.
-
 export interface ReservableInt {
   id: number;
   spaceId: number;
@@ -109,4 +106,12 @@ export enum LoanStatus {
   LATE = "LATE",              // material no devuelto a tiempo
   LOST = "LOST",              // material perdido o dañado
   RETURNED = "RETURNED"       // material devuelto (estado final)
+}
+
+export interface CarouselImageInt {
+  id: number;
+  url: string;
+  image_id: string;
+  order: number;
+  createdAt: Date;
 }
