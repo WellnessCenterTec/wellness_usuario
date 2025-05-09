@@ -50,7 +50,16 @@ export default function MisPrestamosPage() {
         title="Mis Préstamos" 
       />
       
+      
       <div className="container mx-auto px-4 py-8">
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 shadow-sm">
+          <div className="flex items-center">
+            <i className="fa-solid fa-location-dot text-blue-600 mr-3 text-xl"></i>
+            <p className="text-blue-800 font-medium">
+              Lugar para recoger el material en las oficinas del Wellness Center 2 piso en recepción
+            </p>
+          </div>
+        </div>
         {/* Tabs */}
         <div className="flex overflow-x-auto mb-6 border-b">
           <button
