@@ -67,6 +67,16 @@ export default function Prestamos() {
       <PageHeader image="/samples/fondo.jpeg" title="Préstamo de Materiales" />
 
       <div className="container mx-auto px-4 py-6">
+
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 shadow-sm">
+          <div className="flex items-center">
+            <i className="fa-solid fa-location-dot text-blue-600 mr-3 text-xl"></i>
+            <p className="text-blue-800 font-medium">
+              Lugar para recoger el material en las oficinas del Wellness Center 2 piso en recepción
+            </p>
+          </div>
+        </div>
+
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-blue-600">Mis Préstamos</h2>
           <button
