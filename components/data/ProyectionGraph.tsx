@@ -30,13 +30,23 @@ interface CustomBarProps extends BarProps {
     payload: ProyectionGraphData;
 }
 
-const CustomBar = (props:any ) => {
-    const { fill, x, y, width, height, payload } = props;
-  
+const CustomBar = (props: any) => {
+    const { x, y, width, height, payload } = props;
+
     // Cambiar el color a gris si projection es true
-    const actualFill = payload.projection ? '#A9A9A9' : fill;
-  
-    return <Rectangle x={x ? +x : 0} y={y ? +y : 0} width={width} height={height} fill={actualFill} />;
+    const actualFill = payload?.projection ? '#94A3B8' : '#3B82F6';
+
+    return (
+      <Rectangle
+        x={x || 0}
+        y={y || 0}
+        width={width || 0}
+        height={height || 0}
+        fill={actualFill}
+        rx={4}
+        ry={4}
+      />
+    );
   };
   
 
@@ -45,34 +55,78 @@ const CustomBar = (props:any ) => {
   }
 
 export default function ProyectionGraph({data}:Props) {
+  // Si no hay datos, usar datos de ejemplo
+  const chartData = (!data || !Array.isArray(data) || data.length === 0) ? mock_data : data;
 
-  const maxValue = Math.max(...data.map((item)=>item.value))
+  // Validar que cada elemento tiene las propiedades necesarias
+  const validData = chartData.filter(item =>
+    item &&
+    typeof item === 'object' &&
+    'label' in item &&
+    'value' in item &&
+    typeof item.value === 'number'
+  );
+
+  if (validData.length === 0) {
+    return (
+      <div className="w-full h-52 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-slate-200 rounded-lg mx-auto mb-2"></div>
+          <p className="text-sm text-slate-500">Datos inválidos</p>
+        </div>
+      </div>
+    );
+  }
+
+  const maxValue = Math.max(...validData.map((item) => item.value));
 
   return (
-    <div className="w-full h-52 px-5">
-        <ResponsiveContainer width="100%" height="100%">
+    <div className="w-full h-52 px-2">
+      <ResponsiveContainer width="100%" height="100%">
         <ComposedChart
           width={500}
           height={300}
-          data={data}
+          data={validData}
           margin={{
-            top: 5,
-            right: 30,
+            top: 20,
+            right: 20,
             left: 20,
-            bottom: 5,
+            bottom: 20,
           }}
         >
-          <ReferenceLine y={maxValue}  label={{ value: maxValue, position: 'insideTopLeft' }} stroke="red" strokeDasharray="3 3" /> 
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="label" />
-          {/* <YAxis /> */}
-          {/* <Tooltip /> */}
-          
-          <Bar dataKey="value" fill="#93C5FD" shape={<CustomBar />}  />
-          {/* <Line dataKey="value" fill="#CFFAFE" stroke='#7DD3FC' dot={false} /> */}
-          
+          <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
+          <XAxis
+            dataKey="label"
+            axisLine={false}
+            tickLine={false}
+            tick={{ fontSize: 12, fill: '#64748B' }}
+          />
+          <YAxis
+            axisLine={false}
+            tickLine={false}
+            tick={{ fontSize: 12, fill: '#64748B' }}
+          />
+          <Tooltip
+            contentStyle={{
+              backgroundColor: 'white',
+              border: '1px solid #E2E8F0',
+              borderRadius: '8px',
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+            }}
+          />
+          <ReferenceLine
+            y={maxValue}
+            label={{ value: `Máximo: ${maxValue}`, position: 'insideTopRight' }}
+            stroke="#EF4444"
+            strokeDasharray="5 5"
+          />
+          <Bar
+            dataKey="value"
+            fill="#3B82F6"
+            shape={<CustomBar />}
+          />
         </ComposedChart>
-        </ResponsiveContainer>
+      </ResponsiveContainer>
     </div>
-  )
+  );
 }

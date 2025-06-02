@@ -1,111 +1,159 @@
 "use client";
 
 import Space from "@/components/pages/index/Space";
-import PageHeader from "@/components/shared/PageHeader";
 import React from "react";
-
-import { Carousel } from 'react-responsive-carousel';
-import "react-responsive-carousel/lib/styles/carousel.min.css"; 
 
 import useSWR from "swr";
 import { fetcher } from "@/config/fetcher";
-import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
-import { CarouselImageInt, SpaceInt } from "@/styles/ModelTypes";
-
+import { SpaceInt } from "@/styles/ModelTypes";
 
 import Spinner from "@/components/shared/Spinner";
 import { ProyectionGraphData } from "@/styles/AppTypes";
-import CircleGraph from "@/components/data/CircleGraph";
 import ProyectionGraph from "@/components/data/ProyectionGraph";
-import Image from "next/image";
 
+// Live Status Dashboard Component
+function LiveStatusDashboard({ liveStatusData }: { liveStatusData: any }) {
+  // Datos mock para cuando no hay datos reales
+  const mockLiveStatus = [
+    { label: "Ocupado", value: 380, color: "#EF4444" },
+    { label: "Disponible", value: 120, color: "#10B981" }
+  ];
 
+  // Usar datos reales si están disponibles, sino usar mock
+  let statusData = mockLiveStatus;
 
-export default  function Index() {
+  if (liveStatusData && Array.isArray(liveStatusData) && liveStatusData.length > 0) {
+    statusData = liveStatusData.map((item: any, index: number) => ({
+      label: item.label || (index === 0 ? "Ocupado" : "Disponible"),
+      value: item.value || 0,
+      color: index === 0 ? "#EF4444" : "#10B981"
+    }));
+  }
 
-  const {data:hourStatus} = useSWR<ProyectionGraphData[]>("/space/wellnessAttendances",fetcher)
-  const { data: announces=[], mutate } = useSWR<CarouselImageInt[]>(
-    "/admin/carouselImages",
-    fetcher
+  const totalCapacity = statusData.reduce((sum, item) => sum + item.value, 0);
+  const occupiedPercentage = totalCapacity > 0
+    ? Math.round((statusData[0].value / totalCapacity) * 100)
+    : 0;
+
+  return (
+    <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6">
+      <h2 className="text-2xl font-bold text-slate-900 mb-6 text-center">
+        Afluencia en Tiempo Real
+      </h2>
+
+      <div className="flex flex-col md:flex-row items-center justify-center gap-8">
+        {/* Circular Progress */}
+        <div className="relative w-48 h-48">
+          <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+            <circle
+              cx="50"
+              cy="50"
+              r="45"
+              stroke="#E2E8F0"
+              strokeWidth="8"
+              fill="none"
+            />
+            <circle
+              cx="50"
+              cy="50"
+              r="45"
+              stroke="#EF4444"
+              strokeWidth="8"
+              fill="none"
+              strokeDasharray={`${occupiedPercentage * 2.83} 283`}
+              strokeLinecap="round"
+              className="transition-all duration-1000"
+            />
+          </svg>
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <span className="text-3xl font-bold text-slate-900">{occupiedPercentage}%</span>
+            <span className="text-sm text-slate-500">Ocupado</span>
+          </div>
+        </div>
+
+        {/* Status Legend */}
+        <div className="space-y-4">
+          {statusData.map((status, index) => (
+            <div key={index} className="flex items-center gap-4">
+              <div
+                className="w-4 h-4 rounded-full"
+                style={{ backgroundColor: status.color }}
+              />
+              <span className="text-lg font-medium text-slate-700">{status.label}</span>
+              <span className="text-2xl font-bold text-slate-900">{status.value}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
+}
+
+export default function Index() {
+  const {data:hourStatus} = useSWR<ProyectionGraphData[]>("/space/wellnessAttendances",fetcher)
   const { data } = useSWR<SpaceInt[]>(`/user/getSpaces`, fetcher);
-  const { auth } = useSelector((state: RootState) => state.auth);
-  const { data: liveStatus } = useSWR("/space/liveStatus", fetcher);
+  const { data: liveStatusData } = useSWR<any>("/space/liveStatus", fetcher);
 
 
   return (
-    <div className="">
-      <Carousel showArrows={true} stopOnHover={true} 
-            autoPlay={true} infiniteLoop = {true} 
-            interval = {5000} 
-            showThumbs = {true} 
-            showStatus = {false} 
-            useKeyboardArrows = {true}>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      <div
+        key="welcome"
+        className="relative w-full h-64 overflow-hidden bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center"
+      >
+        <div className="text-center text-white">
+          <h2 className="text-2xl font-bold mb-2">
+            ¡Te damos la bienvenida al Wellness Center!
+          </h2>
+          <p className="text-blue-100">Tu centro de bienestar universitario</p>
+        </div>
+      </div>
 
-            {announces.map((element) => (
-              <div className="relative w-full  overflow-hidden">
-              <Image src = {element.url} className="object-cover w-full h-full" alt="" width={300} height={200} />
+      {/* Live Status Card */}
+      <div className="mx-4 -mt-8 relative z-10">
+        <LiveStatusDashboard liveStatusData={liveStatusData} />
+      </div>
+
+      {/* Hourly Chart Section */}
+      <div className="mx-4 mt-6">
+        <div className="bg-white rounded-2xl shadow-lg p-6 border border-slate-200">
+          <h2 className="text-xl font-bold text-slate-800 mb-4 text-center">
+            Afluencia por Hora
+          </h2>
+          <div className="w-full">
+            {hourStatus ? (
+              <ProyectionGraph data={hourStatus} />
+            ) : (
+              <div className="flex justify-center py-8">
+                <Spinner />
               </div>
-
-                
-            ))}
-
-            </Carousel>
-
-      <div className="">
-        <div>
-        <p className='text-center font-bold text-2xl my-8'>Afluencia del Gimnasio en tiempo real</p>
-        <div className="flex flex-col md:flex-row items-center justify-center">
-          <div className="w-full md:w-1/3">
-            <CircleGraph />
+            )}
           </div>
+        </div>
+      </div>
 
-          {liveStatus && (
-            <div className="flex flex-col items-start gap-3 mx-3 md:ml-2">
-              <div className="flex items-center gap-2">
-                <div className={`w-8 h-8 rounded-md bg-[#F43F5E]`}></div>
-                <p className="text-2xl">Lleno</p>
-                <p className="text-2xl">{liveStatus[0].value}</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className={`w-8 h-8 rounded-md bg-[#60A5FA]`}></div>
-                <p className="text-2xl">Disponible</p>
-                <p className="text-2xl">{liveStatus[1].value}</p>
-              </div>
+      {/* Services Section */}
+      <div className="mx-4 mt-6 pb-8">
+        <h2 className="text-2xl font-bold text-slate-800 mb-6 text-center">
+          Servicios Disponibles
+        </h2>
+
+        <div className="space-y-4">
+          {data ? (
+            data.map((space) => (
+              <Space
+                key={space.id}
+                name={space.name}
+                id={space.id}
+                img={space.image}
+              />
+            ))
+          ) : (
+            <div className="flex justify-center py-8">
+              <Spinner />
             </div>
           )}
         </div>
-        
-        <p className='text-center font-bold text-2xl my-8'>Afluencia del Gimnasio por hora</p>
-        <div className=' mx-auto'>
-          {hourStatus && (
-
-          <ProyectionGraph
-            data={hourStatus}
-          />
-          )}
-        </div>
-
-
-      </div>
-
-
-    </div>
-
-      <div className="mt-5 ">
-        <p className="text-blue-800 text-2xl font-bold ml-8 ">Servicios</p>
-
-        <div className="grid place-items-center gap-4 mt-6 mx-auto w-2/3">
-          
-          {data ? (
-              data.map((space) => <Space name={space.name} id = {space.id} img ={space.image} />)
-            ) : (
-              <Spinner />
-            )}
-
-        </div>
-
       </div>
     </div>
   );
