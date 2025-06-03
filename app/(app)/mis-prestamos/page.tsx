@@ -51,22 +51,22 @@ export default function MisPrestamosPage() {
       />
       
       
-      <div className="container mx-auto px-4 py-8">
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 shadow-sm">
-          <div className="flex items-center">
-            <i className="fa-solid fa-location-dot text-blue-600 mr-3 text-xl"></i>
-            <p className="text-blue-800 font-medium">
+      <div className="py-6 sm:py-8">
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 sm:p-6 mb-6 shadow-sm">
+          <div className="flex items-start sm:items-center gap-3">
+            <i className="fa-solid fa-location-dot text-blue-600 text-lg sm:text-xl flex-shrink-0 mt-1 sm:mt-0"></i>
+            <p className="text-blue-800 font-medium text-sm sm:text-base">
               Lugar para recoger el material en las oficinas del Wellness Center 2 piso en recepción
             </p>
           </div>
         </div>
         {/* Tabs */}
-        <div className="flex overflow-x-auto mb-6 border-b">
+        <div className="flex overflow-x-auto mb-6 border-b scrollbar-hide">
           <button
             onClick={() => setActiveTab("pending")}
-            className={`px-4 py-2 font-medium text-sm flex items-center whitespace-nowrap ${
-              activeTab === "pending" 
-                ? "text-blue-600 border-b-2 border-blue-600" 
+            className={`px-4 sm:px-6 py-3 font-medium text-sm sm:text-base flex items-center whitespace-nowrap transition-colors ${
+              activeTab === "pending"
+                ? "text-blue-600 border-b-2 border-blue-600"
                 : "text-gray-500 hover:text-gray-700"
             }`}
           >
@@ -77,12 +77,12 @@ export default function MisPrestamosPage() {
               </span>
             )}
           </button>
-          
+
           <button
             onClick={() => setActiveTab("active")}
-            className={`px-4 py-2 font-medium text-sm flex items-center whitespace-nowrap ${
-              activeTab === "active" 
-                ? "text-blue-600 border-b-2 border-blue-600" 
+            className={`px-4 sm:px-6 py-3 font-medium text-sm sm:text-base flex items-center whitespace-nowrap transition-colors ${
+              activeTab === "active"
+                ? "text-blue-600 border-b-2 border-blue-600"
                 : "text-gray-500 hover:text-gray-700"
             }`}
           >
@@ -93,12 +93,12 @@ export default function MisPrestamosPage() {
               </span>
             )}
           </button>
-          
+
           <button
             onClick={() => setActiveTab("history")}
-            className={`px-4 py-2 font-medium text-sm flex items-center whitespace-nowrap ${
-              activeTab === "history" 
-                ? "text-blue-600 border-b-2 border-blue-600" 
+            className={`px-4 sm:px-6 py-3 font-medium text-sm sm:text-base flex items-center whitespace-nowrap transition-colors ${
+              activeTab === "history"
+                ? "text-blue-600 border-b-2 border-blue-600"
                 : "text-gray-500 hover:text-gray-700"
             }`}
           >
@@ -129,20 +129,26 @@ export default function MisPrestamosPage() {
         ) : (
           <>
             {filteredLoans && filteredLoans.length > 0 ? (
-              <div className="space-y-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                 {filteredLoans.map((loan) => (
                   <LoanCard key={loan.id} loan={loan} />
                 ))}
               </div>
             ) : (
               <div className="text-center py-12">
-                <p className="text-gray-500">
-                  {activeTab === "pending" 
-                    ? "No tienes préstamos pendientes" 
-                    : activeTab === "active" 
-                      ? "No tienes préstamos activos" 
-                      : "No tienes historial de préstamos"}
-                </p>
+                <div className="bg-white rounded-2xl shadow-lg p-8 border border-slate-200">
+                  <svg className="w-16 h-16 text-slate-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                  </svg>
+                  <h3 className="text-xl font-semibold text-slate-800 mb-2">No hay préstamos</h3>
+                  <p className="text-slate-600">
+                    {activeTab === "pending"
+                      ? "No tienes préstamos pendientes"
+                      : activeTab === "active"
+                        ? "No tienes préstamos activos"
+                        : "No tienes historial de préstamos"}
+                  </p>
+                </div>
               </div>
             )}
           </>

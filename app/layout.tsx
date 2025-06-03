@@ -33,13 +33,13 @@ export default function RootLayout({ children }: RootProps) {
         />
       </head>
       <ReduxProvider>
-    
+
         <body
-          className='max-w-xl mx-auto'
+          className='w-full min-h-screen bg-gray-100'
         >{children}</body>
       </ReduxProvider>
 
-      
+
     </html>
   );
 }
