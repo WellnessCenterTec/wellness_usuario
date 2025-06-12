@@ -92,9 +92,10 @@ function LiveStatusDashboard({ liveStatusData }: { liveStatusData: any }) {
 }
 
 export default function Index() {
-  const {data:hourStatus} = useSWR<ProyectionGraphData[]>("/space/wellnessAttendances",fetcher)
-  const { data } = useSWR<SpaceInt[]>(`/user/getSpaces`, fetcher);
-  const { data: liveStatusData } = useSWR<any>("/space/liveStatus", fetcher);
+  // Use public endpoints for general data viewing
+  const {data:hourStatus} = useSWR<ProyectionGraphData[]>("/space/wellnessAttendances/public",fetcher)
+  const { data } = useSWR<SpaceInt[]>(`/space/spaces/public`, fetcher);
+  const { data: liveStatusData } = useSWR<any>("/space/liveStatus/public", fetcher);
 
 
   return (

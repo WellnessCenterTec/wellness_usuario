@@ -10,10 +10,17 @@ import LoanRequestModal from "@/components/pages/materiales/LoanRequestModal";
 import MaterialRulesModal from "@/components/pages/materiales/MaterialRulesModal";
 import { MaterialInt } from "@/styles/ModelTypes";
 import { useDebounce } from "@/hooks/useDebounce";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 export default function MaterialesPage() {
+  const { auth } = useSelector((state: RootState) => state.auth);
+
+  // Use public endpoint if not authenticated, authenticated endpoint if logged in
+  const endpoint = auth?.id ? "/material/available" : "/material/public/available";
+
   const { data: materials, isLoading, error } = useSWR<MaterialInt[]>(
-    "/material/available",
+    endpoint,
     fetcher
   );
 
@@ -65,6 +72,17 @@ export default function MaterialesPage() {
   };
 
   const handleRequestLoan = (material: MaterialInt) => {
+    if (!auth?.id) {
+      // Show login prompt for unauthenticated users
+      const shouldRedirect = confirm(
+        "Necesitas iniciar sesión para solicitar un préstamo. ¿Deseas ir a la página de inicio de sesión?"
+      );
+      if (shouldRedirect) {
+        window.location.href = "/login";
+      }
+      return;
+    }
+
     setSelectedMaterial(material);
     setRequestModalOpen(true);
   };
@@ -164,7 +182,7 @@ export default function MaterialesPage() {
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                                 </svg>
-                                Solicitar
+                                {auth?.id ? "Solicitar" : "Iniciar Sesión"}
                               </button>
                               {material.rules && (
                                 <button
@@ -193,6 +211,7 @@ export default function MaterialesPage() {
                       material={material}
                       onRequestLoan={() => handleRequestLoan(material)}
                       onShowRules={() => handleShowRules(material)}
+                      isAuthenticated={!!auth?.id}
                     />
                   ))}
                 </div>

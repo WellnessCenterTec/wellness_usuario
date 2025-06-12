@@ -5,9 +5,10 @@ interface MaterialCardProps {
   material: MaterialInt;
   onRequestLoan: () => void;
   onShowRules: () => void;
+  isAuthenticated?: boolean;
 }
 
-export default function MaterialCard({ material, onRequestLoan, onShowRules }: MaterialCardProps) {
+export default function MaterialCard({ material, onRequestLoan, onShowRules, isAuthenticated = false }: MaterialCardProps) {
   return (
     <div className="bg-white rounded-lg shadow-md p-4 border border-gray-200">
       <div className="flex items-center gap-3 mb-3">
@@ -51,7 +52,7 @@ export default function MaterialCard({ material, onRequestLoan, onShowRules }: M
           onClick={onRequestLoan}
           className="flex-1 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
         >
-          Solicitar Préstamo
+          {isAuthenticated ? "Solicitar Préstamo" : "Iniciar Sesión"}
         </button>
         {material.rules && (
           <button

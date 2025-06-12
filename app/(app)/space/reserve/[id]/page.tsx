@@ -18,6 +18,7 @@ import useSWR from "swr";
 import { fetcher } from "@/config/fetcher";
 import { ReservableInt } from "@/styles/ModelTypes";
 import { DateTime } from "luxon";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
 
 export default function Reserve() {
   // Obtenemos el id del reservable
@@ -94,60 +95,62 @@ export default function Reserve() {
     DateTime.now().plus({ day: 1 }).toJSDate() <= reservableDate;
 
   return (
-    <div>
-      <div className="flex items-center mx-4 pt-3">
-        <p className="text-2xl flex-1 text-center font-bold">{spaceName} </p>
-      </div>
-
-      <div className="grid grid-cols-2 mt-4">
-        <div className="w-full">
-          <Image
-            className=" object-center object-cover rounded-md"
-            src={reservable.space?.image ?? "/samples/fondo.jpeg"}
-            width={400}
-            height={400}
-            alt="Imagen de fondo"
-          />
+    <ProtectedRoute showLoginPrompt={true}>
+      <div>
+        <div className="flex items-center mx-4 pt-3">
+          <p className="text-2xl flex-1 text-center font-bold">{spaceName} </p>
         </div>
 
-        <div className="px-3 text-center">
-          <div className="bg-blue-700 rounded-xl p-3">
-            <p className="text-center text-gray-100">Horario</p>
-            <p className="text-gray-50 font-bold">
-              {" "}
-              {formatearHora(new Date(init_date))} -{" "}
-              {formatearHora(new Date(end_date))}{" "}
-            </p>
+        <div className="grid grid-cols-2 mt-4">
+          <div className="w-full">
+            <Image
+              className=" object-center object-cover rounded-md"
+              src={reservable.space?.image ?? "/samples/fondo.jpeg"}
+              width={400}
+              height={400}
+              alt="Imagen de fondo"
+            />
           </div>
 
-          <div className="rounded-xl p-3 ring-1 ring-blue-800 mt-6">
-            <p className="text-center">Ocupación</p>
-            <p className="text-center text-blue-800 font-bold text-2xl">
-              {reservable.onlineQuotaString}
-            </p>
-          </div>
+          <div className="px-3 text-center">
+            <div className="bg-blue-700 rounded-xl p-3">
+              <p className="text-center text-gray-100">Horario</p>
+              <p className="text-gray-50 font-bold">
+                {" "}
+                {formatearHora(new Date(init_date))} -{" "}
+                {formatearHora(new Date(end_date))}{" "}
+              </p>
+            </div>
 
-          <div className="rounded-xl p-3 shadow mt-3">
-            <p className="text-center text-gray-700">Maestro</p>
+            <div className="rounded-xl p-3 ring-1 ring-blue-800 mt-6">
+              <p className="text-center">Ocupación</p>
+              <p className="text-center text-blue-800 font-bold text-2xl">
+                {reservable.onlineQuotaString}
+              </p>
+            </div>
 
-            <p className="text-center text-xl"> {admin?.name} </p>
+            <div className="rounded-xl p-3 shadow mt-3">
+              <p className="text-center text-gray-700">Maestro</p>
+
+              <p className="text-center text-xl"> {admin?.name} </p>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="w-full grid place-items-center mt-5">
-        <button
-          type="button"
-          className={`${
-            shouldDisable
-              ? "bg-gray-300 text-gray-600"
-              : "bg-blue-800 text-gray-50"
-          } rounded-2xl px-5 py-2 font-bold  text-2xl`}
-          onClick={handleSubmit}
-        >
-          Reservar
-        </button>
+        <div className="w-full grid place-items-center mt-5">
+          <button
+            type="button"
+            className={`${
+              shouldDisable
+                ? "bg-gray-300 text-gray-600"
+                : "bg-blue-800 text-gray-50"
+            } rounded-2xl px-5 py-2 font-bold  text-2xl`}
+            onClick={handleSubmit}
+          >
+            Reservar
+          </button>
+        </div>
       </div>
-    </div>
+    </ProtectedRoute>
   );
 }

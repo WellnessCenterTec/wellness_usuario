@@ -9,6 +9,7 @@ import PageHeader from "@/components/shared/PageHeader";
 import Spinner from "@/components/shared/Spinner";
 import LoanCard from "@/components/pages/prestamos/LoanCard";
 import { LoanInt, LoanStatus } from "@/styles/ModelTypes";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
 
 export default function MisPrestamosPage() {
   const { auth } = useSelector((state: RootState) => state.auth);
@@ -44,14 +45,15 @@ export default function MisPrestamosPage() {
   ).length || 0;
   
   return (
-    <div>
-      <PageHeader 
-        image="/samples/fondo.jpeg" 
-        title="Mis Préstamos" 
-      />
-      
-      
-      <div className="py-6 sm:py-8">
+    <ProtectedRoute>
+      <div>
+        <PageHeader
+          image="/samples/fondo.jpeg"
+          title="Mis Préstamos"
+        />
+
+
+        <div className="py-6 sm:py-8">
         <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 sm:p-6 mb-6 shadow-sm">
           <div className="flex items-start sm:items-center gap-3">
             <i className="fa-solid fa-location-dot text-blue-600 text-lg sm:text-xl flex-shrink-0 mt-1 sm:mt-0"></i>
@@ -153,7 +155,8 @@ export default function MisPrestamosPage() {
             )}
           </>
         )}
+        </div>
       </div>
-    </div>
+    </ProtectedRoute>
   );
 }
