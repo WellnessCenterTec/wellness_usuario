@@ -9,6 +9,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { AiOutlineMenu, AiOutlineClose, AiOutlineBell, AiOutlineLogin, AiOutlineUserAdd } from "react-icons/ai";
 import useSWR from "swr";
+import Footer from "@/components/UI/Footer";
 
 interface Props {
   children: React.ReactNode;
@@ -138,13 +139,16 @@ export default function PublicLayout({ children }: Props) {
         handleSmallerScreensNavigation={handleSmallerScreensNavigation}
       />
 
-      <main className="bg-gray-100 min-h-screen">
-        <div className="max-w-7xl mx-auto">
-          <div className="px-4 sm:px-6 lg:px-8">
-            {children}
+      <div className="bg-gray-100 min-h-screen flex flex-col">
+        <main className="flex-1">
+          <div className="max-w-7xl mx-auto">
+            <div className="px-4 sm:px-6 lg:px-8">
+              {children}
+            </div>
           </div>
-        </div>
-      </main>
+        </main>
+        <Footer />
+      </div>
     </NextUIProvider>
   );
 }

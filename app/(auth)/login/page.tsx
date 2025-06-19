@@ -1,126 +1,289 @@
-"use client"
+"use client";
 
 import clienteAxios from "@/config/clienteAxios";
 import Image from "next/image";
-import React, { useState } from "react";
-
-import jsCookie from "js-cookie"
+import React, { useState, useEffect } from "react";
+import jsCookie from "js-cookie";
 import { useDispatch } from "react-redux";
 import { setAuth } from "@/redux/slices/authSlice";
-import { useRouter } from "next/navigation";
+
 import { handleError } from "@/utils/errorHandler";
 import Link from "next/link";
+import { AiOutlineEye, AiOutlineEyeInvisible, AiOutlineUser, AiOutlineLock, AiOutlineLoading3Quarters } from "react-icons/ai";
 
+interface FormErrors {
+  registration?: string;
+  password?: string;
+}
 
 export default function Login() {
+  const [registration, setRegistration] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [touched, setTouched] = useState<{ [key: string]: boolean }>({});
 
-  const [registration, setRegistration] = useState("")
-  const [password, setPassword] = useState("")
+  const dispatch = useDispatch();
 
-  const dispatch = useDispatch()
-  const router = useRouter()
+  // Validation functions
+  const validateRegistration = (value: string): string | undefined => {
+    if (!value.trim()) {
+      return "La matrícula es requerida";
+    }
+    if (!/^[Aa]\d{8}$/.test(value)) {
+      return "La matrícula debe tener el formato A00000000";
+    }
+    return undefined;
+  };
 
-  const handleSubmit = async (e:any)=>{
-    e.preventDefault()
+  const validatePassword = (value: string): string | undefined => {
+    if (!value) {
+      return "La contraseña es requerida";
+    }
+    if (value.length < 6) {
+      return "La contraseña debe tener al menos 6 caracteres";
+    }
+    return undefined;
+  };
+
+  // Real-time validation
+  useEffect(() => {
+    if (touched.registration) {
+      const error = validateRegistration(registration);
+      setErrors(prev => ({ ...prev, registration: error }));
+    }
+  }, [registration, touched.registration]);
+
+  useEffect(() => {
+    if (touched.password) {
+      const error = validatePassword(password);
+      setErrors(prev => ({ ...prev, password: error }));
+    }
+  }, [password, touched.password]);
+
+  const handleBlur = (field: string) => {
+    setTouched(prev => ({ ...prev, [field]: true }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Mark all fields as touched
+    setTouched({ registration: true, password: true });
+
+    // Validate all fields
+    const registrationError = validateRegistration(registration);
+    const passwordError = validatePassword(password);
+
+    const newErrors: FormErrors = {
+      registration: registrationError,
+      password: passwordError,
+    };
+
+    setErrors(newErrors);
+
+    // Check if there are any errors
+    if (registrationError || passwordError) {
+      return;
+    }
+
+    setIsLoading(true);
 
     try {
-      
-      // Hacemos la peticion
-
-      const {data} = await clienteAxios.post("/user/login",{
-        registration, password
-      })
-
-      // Colocamos la cookie
+      const { data } = await clienteAxios.post("/user/login", {
+        registration: registration.toUpperCase(),
+        password,
+      });
 
       jsCookie.set("token", data.token, {
         expires: new Date().setMonth(new Date().getMonth() + 1),
       });
 
-      // Guardamos la autenticacion
-
-      dispatch(setAuth(data))
-
-      // Mandamos a la pantalla principal con window
-      window.location.href = "/"
-      
-
-    } catch (error:any) {
-      return handleError(error)
+      dispatch(setAuth(data));
+      window.location.href = "/";
+    } catch (error: any) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
-    <form 
-    onSubmit={handleSubmit}
-    className="min-h-screen relative">
-      {/* Imagen de fondo */}
-      <Image
-        src="/estadio.png"
-        alt="Fondo"
-        width={600}
-        height={200}
-        className="w-full min-h-screen absolute top-0 left-0 object-center object-cover z-10"
-      />
-
-      {/* Overlay */}
-
-      <div className="bg-gray-900 opacity-70 w-full min-h-screen absolute top-0 left-0 object-center object-cover z-20"></div>
-
-      {/* Contenido principal */}
-
-      <div className="w-full min-h-screen absolute top-0 left-0 grid place-items-center z-30">
-        <div className="grid place-items-center w-full">
-          <Image
-            src={"/borrego.png"}
-            alt="Logo"
-            className="w-1/2 mb-10"
-            width={600}
-            height={200}
-          />
-
-          <div className="grid place-items-center gap-4 w-full">
-            <div className="border-b-2 border-white w-2/3">
-              <p className="text-gray-50">Matricula</p>
-              <input 
-              
-              className="bg-transparent text-white py-1 rounded-md w-full"
-              type="text"
-              placeholder="A000000000"
-              onChange={(e)=>setRegistration(e.target.value)}
-              value={registration}
-              />
-            </div>
-
-            <div className="border-b-2 border-white w-2/3">
-              <input 
-              className="bg-transparent text-white py-1 rounded-md w-full"
-              type="password" 
-              placeholder="Contraseña"
-              onChange={(e)=>setPassword(e.target.value)}
-              value={password}
-              />
-            </div>
-
-            <div>
-              <Link 
-              className="text-gray-50"
-              href="/register"
-              >
-                
-                ¿No tienes cuenta? Registrate
-
-              </Link>
-            </div>
-
-
-            <input 
-            className="inline-block bg-blue-700 rounded-lg px-4 py-2 text-lg text-gray-50 capitalize mt-8"
-            type="submit" 
-            value="iniciar Sesion" />
-          </div>
-        </div>
+    <div className="min-h-screen relative flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/images/borregos.jpg"
+          alt="Wellness Center Background"
+          fill
+          className="object-cover object-center"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/80 to-slate-900/70"></div>
       </div>
-    </form>
+
+      {/* Main Content */}
+      <div className="relative z-10 w-full max-w-md mx-auto px-6 py-8">
+        {/* Logo and Header */}
+        <div className="text-center mb-8 animate-fade-in">
+          <div className="flex justify-center mb-6">
+            <div className="w-20 h-20 bg-blue-700 rounded-2xl shadow-lg flex items-center justify-center transform hover:scale-105 transition-transform duration-300">
+              <Image
+                src="/borrego.png"
+                alt="Wellness Center Logo"
+                width={60}
+                height={60}
+                className="object-contain"
+              />
+            </div>
+          </div>
+          <h1 className="text-3xl font-bold text-white mb-2">¡Hola de nuevo!</h1>
+          <p className="text-blue-100">Inicia sesión en Wellness Center</p>
+        </div>
+
+        {/* Login Form */}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white/20">
+            {/* Registration Field */}
+            <div className="space-y-2 mb-4">
+              <label htmlFor="registration" className="block text-sm font-medium text-white">
+                Matrícula
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <AiOutlineUser className="h-5 w-5 text-blue-200" />
+                </div>
+                <input
+                  id="registration"
+                  type="text"
+                  value={registration}
+                  onChange={(e) => setRegistration(e.target.value)}
+                  onBlur={() => handleBlur('registration')}
+                  placeholder="A00000000"
+                  className={`w-full pl-10 pr-4 py-3 bg-white/20 border rounded-xl text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300 ${
+                    errors.registration && touched.registration
+                      ? 'border-red-400 focus:ring-red-400'
+                      : 'border-white/30'
+                  }`}
+                  autoComplete="username"
+                  inputMode="text"
+                />
+              </div>
+              {errors.registration && touched.registration && (
+                <p className="text-red-300 text-sm mt-1 animate-slide-down">
+                  {errors.registration}
+                </p>
+              )}
+            </div>
+
+            {/* Password Field */}
+            <div className="space-y-2 mb-4">
+              <label htmlFor="password" className="block text-sm font-medium text-white">
+                Contraseña
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <AiOutlineLock className="h-5 w-5 text-blue-200" />
+                </div>
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  onBlur={() => handleBlur('password')}
+                  placeholder="••••••••"
+                  className={`w-full pl-10 pr-12 py-3 bg-white/20 border rounded-xl text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-300 ${
+                    errors.password && touched.password
+                      ? 'border-red-400 focus:ring-red-400'
+                      : 'border-white/30'
+                  }`}
+                  autoComplete="current-password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-blue-200 hover:text-white transition-colors duration-200"
+                  aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                >
+                  {showPassword ? (
+                    <AiOutlineEyeInvisible className="h-5 w-5" />
+                  ) : (
+                    <AiOutlineEye className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
+              {errors.password && touched.password && (
+                <p className="text-red-300 text-sm mt-1 animate-slide-down">
+                  {errors.password}
+                </p>
+              )}
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-blue-400 disabled:to-blue-500 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-[1.02] disabled:scale-100 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-transparent shadow-lg"
+            >
+              {isLoading ? (
+                <div className="flex items-center justify-center">
+                  <AiOutlineLoading3Quarters className="animate-spin h-5 w-5 mr-2" />
+                  Iniciando sesión...
+                </div>
+              ) : (
+                "Iniciar Sesión"
+              )}
+            </button>
+          </div>
+
+          {/* Register Link */}
+          <div className="text-center">
+            <Link
+              href="/register"
+              className="text-blue-200 hover:text-white transition-colors duration-200 text-sm font-medium"
+            >
+              ¿No tienes cuenta?{" "}
+              <span className="underline decoration-2 underline-offset-2">
+                Regístrate aquí
+              </span>
+            </Link>
+          </div>
+        </form>
+      </div>
+
+      {/* Custom Styles */}
+      <style jsx>{`
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+            transform: translateY(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes slide-down {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .animate-fade-in {
+          animation: fade-in 0.6s ease-out;
+        }
+
+        .animate-slide-down {
+          animation: slide-down 0.3s ease-out;
+        }
+      `}</style>
+    </div>
   );
 }

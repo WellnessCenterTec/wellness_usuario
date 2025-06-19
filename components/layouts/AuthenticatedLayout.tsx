@@ -11,9 +11,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { AiOutlineMenu, AiOutlineClose, AiOutlineBell, AiOutlineLogout, AiOutlineUser } from "react-icons/ai";
+import { HiExternalLink } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import useSWR from "swr";
 import jsCookie from "js-cookie";
+import Footer from "@/components/UI/Footer";
 
 interface Props {
   children: React.ReactNode;
@@ -61,10 +63,10 @@ export default function AuthenticatedLayout({ children }: Props) {
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center space-x-8">
+            <nav className="hidden lg:flex items-center space-x-6">
               <Link
                 href="/"
-                className="flex items-center gap-2 px-3 py-2 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                className="flex items-center gap-2 px-4 py-2 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -73,7 +75,7 @@ export default function AuthenticatedLayout({ children }: Props) {
               </Link>
               <Link
                 href="/reservaciones"
-                className="flex items-center gap-2 px-3 py-2 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                className="flex items-center gap-2 px-4 py-2 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -82,7 +84,7 @@ export default function AuthenticatedLayout({ children }: Props) {
               </Link>
               <Link
                 href="/materiales"
-                className="flex items-center gap-2 px-3 py-2 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                className="flex items-center gap-2 px-4 py-2 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
@@ -91,12 +93,37 @@ export default function AuthenticatedLayout({ children }: Props) {
               </Link>
               <Link
                 href="/mis-prestamos"
-                className="flex items-center gap-2 px-3 py-2 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                className="flex items-center gap-2 px-4 py-2 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                 </svg>
                 <span className="font-medium">Mis Préstamos</span>
+              </Link>
+              <Link
+                href="https://sites.google.com/tec.mx/intramurosrecsports/inicio"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-4 py-2 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+                </svg>
+                <span className="font-medium">Intramuros</span>
+                <HiExternalLink className="w-4 h-4 text-slate-500" />
+              </Link>
+              <Link
+                href="https://eventos.tec.mx/s/lt-event?language=es_MX&id=a5u8X000002EqqfQAC"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-4 py-2 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                <span className="font-medium">Lockers</span>
+                <HiExternalLink className="w-4 h-4 text-slate-500" />
               </Link>
             </nav>
 
@@ -182,13 +209,16 @@ export default function AuthenticatedLayout({ children }: Props) {
         handleLogout={handleLogout}
       />
 
-      <main className="bg-gray-100 min-h-screen">
-        <div className="max-w-7xl mx-auto">
-          <div className="px-4 sm:px-6 lg:px-8">
-            {children}
+      <div className="bg-gray-100 min-h-screen flex flex-col">
+        <main className="flex-1">
+          <div className="max-w-7xl mx-auto">
+            <div className="px-4 sm:px-6 lg:px-8">
+              {children}
+            </div>
           </div>
-        </div>
-      </main>
+        </main>
+        <Footer />
+      </div>
     </NextUIProvider>
   );
 }
@@ -235,7 +265,7 @@ function AuthenticatedMobileNavigation({
 
         {/* Navigation Links */}
         <nav className="p-6">
-          <ul className="space-y-2">
+          <ul className="space-y-3">
             <li>
               <Link
                 href="/"
@@ -282,6 +312,35 @@ function AuthenticatedMobileNavigation({
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                 </svg>
                 <span className="font-medium">Mis Préstamos</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="https://sites.google.com/tec.mx/intramurosrecsports/inicio"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 p-3 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors group"
+              >
+                <svg className="w-5 h-5 text-slate-500 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+                </svg>
+                <span className="font-medium">Intramuros</span>
+                <HiExternalLink className="w-4 h-4 text-slate-500 group-hover:text-blue-600" />
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="https://eventos.tec.mx/s/lt-event?language=es_MX&id=a5u8X000002EqqfQAC"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 p-3 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors group"
+              >
+                <svg className="w-5 h-5 text-slate-500 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                <span className="font-medium">Lockers</span>
+                <HiExternalLink className="w-4 h-4 text-slate-500 group-hover:text-blue-600" />
               </Link>
             </li>
             <li>
