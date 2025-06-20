@@ -37,7 +37,7 @@ export default function Footer() {
             </Link>
             
             <Link
-              href="https://github.com/wellness-center/contribute"
+              href="https://github.com/WellnessCenterTec/wellness_usuario"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-3 py-2 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors group"

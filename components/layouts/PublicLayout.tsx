@@ -19,9 +19,21 @@ export default function PublicLayout({ children }: Props) {
   const [menuIcon, setIcon] = useState(false);
   const [announcements, setAnnouncements] = useState(false);
 
-  const handleSmallerScreensNavigation = () => {
+  const handleMenuNavigation = () => {
     setIcon(!menuIcon);
   };
+
+  // Close menu on escape key
+  React.useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && menuIcon) {
+        setIcon(false);
+      }
+    };
+
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [menuIcon]);
 
   const { data: announces } = useSWR<AnnounceInt[]>("/announce/public", fetcher);
 
@@ -44,28 +56,6 @@ export default function PublicLayout({ children }: Props) {
                 Wellness Center
               </span>
             </Link>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center space-x-8">
-              <Link
-                href="/"
-                className="flex items-center gap-2 px-3 py-2 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
-                <span className="font-medium">Inicio</span>
-              </Link>
-              <Link
-                href="/materiales"
-                className="flex items-center gap-2 px-3 py-2 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                </svg>
-                <span className="font-medium">Materiales</span>
-              </Link>
-            </nav>
 
             {/* Navigation Actions */}
             <div className="flex items-center gap-4 relative">
@@ -102,7 +92,7 @@ export default function PublicLayout({ children }: Props) {
               </div>
 
               {/* Auth Buttons - Desktop */}
-              <div className="hidden lg:flex items-center gap-2">
+              <div className="hidden xl:flex items-center gap-2">
                 <Link
                   href="/login"
                   className="flex items-center gap-2 px-4 py-2 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors border border-slate-300"
@@ -119,10 +109,11 @@ export default function PublicLayout({ children }: Props) {
                 </Link>
               </div>
 
-              {/* Mobile Menu Button */}
+              {/* Menu Button - Available on all screen sizes */}
               <button
-                onClick={handleSmallerScreensNavigation}
-                className="lg:hidden p-2 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors"
+                onClick={handleMenuNavigation}
+                className="p-2 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors"
+                title="Abrir menú"
               >
                 {menuIcon ? (
                   <AiOutlineClose size={24} />
@@ -134,9 +125,9 @@ export default function PublicLayout({ children }: Props) {
           </div>
         </div>
       </div>
-      <PublicMobileNavigation
+      <PublicNavigationMenu
         menuIcon={menuIcon}
-        handleSmallerScreensNavigation={handleSmallerScreensNavigation}
+        handleMenuNavigation={handleMenuNavigation}
       />
 
       <div className="bg-gray-100 min-h-screen flex flex-col">
@@ -153,24 +144,24 @@ export default function PublicLayout({ children }: Props) {
   );
 }
 
-interface PublicMobileNavigationProps {
+interface PublicNavigationMenuProps {
   menuIcon: boolean;
-  handleSmallerScreensNavigation: () => void;
+  handleMenuNavigation: () => void;
 }
 
-function PublicMobileNavigation({
+function PublicNavigationMenu({
   menuIcon,
-  handleSmallerScreensNavigation,
-}: PublicMobileNavigationProps) {
+  handleMenuNavigation,
+}: PublicNavigationMenuProps) {
   return (
     <div
       className={`fixed top-0 left-0 w-full h-full bg-black/50 backdrop-blur-sm z-50 transition-all duration-300 ${
         menuIcon ? "opacity-100 visible" : "opacity-0 invisible"
       }`}
-      onClick={handleSmallerScreensNavigation}
+      onClick={handleMenuNavigation}
     >
       <div
-        className={`fixed top-0 right-0 h-full w-80 bg-white shadow-2xl transform transition-transform duration-300 ease-out ${
+        className={`fixed top-0 right-0 h-full w-80 sm:w-96 bg-white shadow-2xl transform transition-transform duration-300 ease-out ${
           menuIcon ? "translate-x-0" : "translate-x-full"
         }`}
         onClick={(e) => e.stopPropagation()}
@@ -179,7 +170,7 @@ function PublicMobileNavigation({
         <div className="flex items-center justify-between p-6 border-b border-slate-200">
           <h2 className="text-xl font-bold text-slate-800">Menú</h2>
           <button
-            onClick={handleSmallerScreensNavigation}
+            onClick={handleMenuNavigation}
             className="p-2 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors"
           >
             <AiOutlineClose size={24} />
@@ -192,7 +183,7 @@ function PublicMobileNavigation({
             <li>
               <Link
                 href="/"
-                onClick={handleSmallerScreensNavigation}
+                onClick={handleMenuNavigation}
                 className="flex items-center gap-3 p-3 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors group"
               >
                 <svg className="w-5 h-5 text-slate-500 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -204,7 +195,7 @@ function PublicMobileNavigation({
             <li>
               <Link
                 href="/materiales"
-                onClick={handleSmallerScreensNavigation}
+                onClick={handleMenuNavigation}
                 className="flex items-center gap-3 p-3 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors group"
               >
                 <svg className="w-5 h-5 text-slate-500 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -219,7 +210,7 @@ function PublicMobileNavigation({
             <li>
               <Link
                 href="/login"
-                onClick={handleSmallerScreensNavigation}
+                onClick={handleMenuNavigation}
                 className="flex items-center gap-3 p-3 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors group"
               >
                 <AiOutlineLogin className="w-5 h-5 text-slate-500 group-hover:text-blue-600" />
@@ -229,7 +220,7 @@ function PublicMobileNavigation({
             <li>
               <Link
                 href="/register"
-                onClick={handleSmallerScreensNavigation}
+                onClick={handleMenuNavigation}
                 className="flex items-center gap-3 p-3 bg-blue-600 text-white hover:bg-blue-700 rounded-xl transition-colors group"
               >
                 <AiOutlineUserAdd className="w-5 h-5" />

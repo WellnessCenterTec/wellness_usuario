@@ -30,9 +30,21 @@ export default function AuthenticatedLayout({ children }: Props) {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const handleSmallerScreensNavigation = () => {
+  const handleMenuNavigation = () => {
     setIcon(!menuIcon);
   };
+
+  // Close menu on escape key
+  React.useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && menuIcon) {
+        setIcon(false);
+      }
+    };
+
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [menuIcon]);
 
   const handleLogout = () => {
     jsCookie.remove("token");
@@ -61,71 +73,6 @@ export default function AuthenticatedLayout({ children }: Props) {
                 Wellness Center
               </span>
             </Link>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center space-x-6">
-              <Link
-                href="/"
-                className="flex items-center gap-2 px-4 py-2 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
-                <span className="font-medium">Inicio</span>
-              </Link>
-              <Link
-                href="/reservaciones"
-                className="flex items-center gap-2 px-4 py-2 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                <span className="font-medium">Reservaciones</span>
-              </Link>
-              <Link
-                href="/materiales"
-                className="flex items-center gap-2 px-4 py-2 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                </svg>
-                <span className="font-medium">Materiales</span>
-              </Link>
-              <Link
-                href="/mis-prestamos"
-                className="flex items-center gap-2 px-4 py-2 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
-                <span className="font-medium">Mis Préstamos</span>
-              </Link>
-              <Link
-                href="https://sites.google.com/tec.mx/intramurosrecsports/inicio"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
-                </svg>
-                <span className="font-medium">Intramuros</span>
-                <HiExternalLink className="w-4 h-4 text-slate-500" />
-              </Link>
-              <Link
-                href="https://eventos.tec.mx/s/lt-event?language=es_MX&id=a5u8X000002EqqfQAC"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-                <span className="font-medium">Lockers</span>
-                <HiExternalLink className="w-4 h-4 text-slate-500" />
-              </Link>
-            </nav>
 
             {/* Navigation Actions */}
             <div className="flex items-center gap-4 relative">
@@ -162,7 +109,7 @@ export default function AuthenticatedLayout({ children }: Props) {
               </div>
 
               {/* User Menu - Desktop */}
-              <div className="hidden lg:block relative">
+              <div className="hidden xl:block relative">
                 <button
                   onClick={() => setUserMenu(!userMenu)}
                   className="flex items-center gap-2 p-2 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors"
@@ -187,10 +134,11 @@ export default function AuthenticatedLayout({ children }: Props) {
                 </div>
               </div>
 
-              {/* Mobile Menu Button */}
+              {/* Menu Button - Available on all screen sizes */}
               <button
-                onClick={handleSmallerScreensNavigation}
-                className="lg:hidden p-2 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors"
+                onClick={handleMenuNavigation}
+                className="p-2 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors"
+                title="Abrir menú"
               >
                 {menuIcon ? (
                   <AiOutlineClose size={24} />
@@ -202,9 +150,9 @@ export default function AuthenticatedLayout({ children }: Props) {
           </div>
         </div>
       </div>
-      <AuthenticatedMobileNavigation
+      <AuthenticatedNavigationMenu
         menuIcon={menuIcon}
-        handleSmallerScreensNavigation={handleSmallerScreensNavigation}
+        handleMenuNavigation={handleMenuNavigation}
         auth={auth}
         handleLogout={handleLogout}
       />
@@ -223,28 +171,28 @@ export default function AuthenticatedLayout({ children }: Props) {
   );
 }
 
-interface AuthenticatedMobileNavigationProps {
+interface AuthenticatedNavigationMenuProps {
   menuIcon: boolean;
-  handleSmallerScreensNavigation: () => void;
+  handleMenuNavigation: () => void;
   auth: any;
   handleLogout: () => void;
 }
 
-function AuthenticatedMobileNavigation({
+function AuthenticatedNavigationMenu({
   menuIcon,
-  handleSmallerScreensNavigation,
+  handleMenuNavigation,
   auth,
   handleLogout,
-}: AuthenticatedMobileNavigationProps) {
+}: AuthenticatedNavigationMenuProps) {
   return (
     <div
       className={`fixed top-0 left-0 w-full h-full bg-black/50 backdrop-blur-sm z-50 transition-all duration-300 ${
         menuIcon ? "opacity-100 visible" : "opacity-0 invisible"
       }`}
-      onClick={handleSmallerScreensNavigation}
+      onClick={handleMenuNavigation}
     >
       <div
-        className={`fixed top-0 right-0 h-full w-80 bg-white shadow-2xl transform transition-transform duration-300 ease-out ${
+        className={`fixed top-0 right-0 h-full w-80 sm:w-96 bg-white shadow-2xl transform transition-transform duration-300 ease-out ${
           menuIcon ? "translate-x-0" : "translate-x-full"
         }`}
         onClick={(e) => e.stopPropagation()}
@@ -256,7 +204,7 @@ function AuthenticatedMobileNavigation({
             <p className="text-sm text-slate-600">{auth?.registration}</p>
           </div>
           <button
-            onClick={handleSmallerScreensNavigation}
+            onClick={handleMenuNavigation}
             className="p-2 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors"
           >
             <AiOutlineClose size={24} />
@@ -269,7 +217,7 @@ function AuthenticatedMobileNavigation({
             <li>
               <Link
                 href="/"
-                onClick={handleSmallerScreensNavigation}
+                onClick={handleMenuNavigation}
                 className="flex items-center gap-3 p-3 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors group"
               >
                 <svg className="w-5 h-5 text-slate-500 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -281,7 +229,7 @@ function AuthenticatedMobileNavigation({
             <li>
               <Link
                 href="/reservaciones"
-                onClick={handleSmallerScreensNavigation}
+                onClick={handleMenuNavigation}
                 className="flex items-center gap-3 p-3 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors group"
               >
                 <svg className="w-5 h-5 text-slate-500 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -293,7 +241,7 @@ function AuthenticatedMobileNavigation({
             <li>
               <Link
                 href="/materiales"
-                onClick={handleSmallerScreensNavigation}
+                onClick={handleMenuNavigation}
                 className="flex items-center gap-3 p-3 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors group"
               >
                 <svg className="w-5 h-5 text-slate-500 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -305,7 +253,7 @@ function AuthenticatedMobileNavigation({
             <li>
               <Link
                 href="/mis-prestamos"
-                onClick={handleSmallerScreensNavigation}
+                onClick={handleMenuNavigation}
                 className="flex items-center gap-3 p-3 text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors group"
               >
                 <svg className="w-5 h-5 text-slate-500 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -350,7 +298,7 @@ function AuthenticatedMobileNavigation({
               <button
                 onClick={() => {
                   handleLogout();
-                  handleSmallerScreensNavigation();
+                  handleMenuNavigation();
                 }}
                 className="w-full flex items-center gap-3 p-3 text-slate-700 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors group"
               >
