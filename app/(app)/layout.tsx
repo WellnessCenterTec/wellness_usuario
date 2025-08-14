@@ -170,7 +170,7 @@ function MobileNavigation({
             onClick={handleSmallerScreensNavigation}
             className="py-10 px-4 hover:text-[#CEFF00] cursor-pointer"
           >
-            <Link href="https://sites.google.com/tec.mx/intramurosrecsports/inicio" target="_blank" className="text-white">
+            <Link href="https://sites.google.com/tec.mx/intramuros-tec-mty/inicio" target="_blank" className="text-white">
               Intramuros
             </Link>
           </li>
