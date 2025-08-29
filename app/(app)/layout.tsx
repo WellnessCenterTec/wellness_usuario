@@ -179,7 +179,7 @@ function MobileNavigation({
             className="py-10 px-4 hover:text-[#CEFF00] cursor-pointer"
           >
             <Link href="https://eventos.tec.mx/s/lt-event?language=es_MX&id=a5u8X000002EqqfQAC" target="_blank" className="text-white">
-              Lockers
+              Lockers / Toallas / Candados
             </Link>
           </li>
         </ul>
