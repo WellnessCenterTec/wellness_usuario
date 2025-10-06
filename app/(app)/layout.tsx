@@ -182,6 +182,14 @@ function MobileNavigation({
               Lockers / Toallas / Candados
             </Link>
           </li>
+          <li
+            onClick={handleSmallerScreensNavigation}
+            className="py-10 px-4 hover:text-[#CEFF00] cursor-pointer"
+          >
+            <Link href="/tour" className="text-white">
+               Tour Virtual Wellness Center
+            </Link>
+          </li>
         </ul>
       </div>
     </div>
