@@ -186,7 +186,7 @@ function MobileNavigation({
             onClick={handleSmallerScreensNavigation}
             className="py-10 px-4 hover:text-[#CEFF00] cursor-pointer"
           >
-            <Link href="/tour" className="text-white">
+            <Link href="https://storage.net-fs.com/hosting/8455148/0/" target="_blank" className="text-white">
                Tour Virtual Wellness Center
             </Link>
           </li>
