@@ -208,7 +208,7 @@ export default function ChatUsuarioPage() {
       <div className="h-full min-h-[calc(100vh-4rem)] w-full flex flex-col items-center justify-center bg-slate-50">
         <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-sm border">
           <div className="text-center mb-6">
-            <h1 className="text-2xl font-semibold text-gray-900">Centro de Bienestar</h1>
+            <h1 className="text-2xl font-semibold text-gray-900">Well-Bot</h1>
             <p className="text-sm text-gray-500 mt-2">
               Ingresa tu matrícula para acceder al chat de soporte
             </p>
