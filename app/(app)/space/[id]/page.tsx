@@ -85,7 +85,7 @@ export default function Space() {
               <Reservable
                 key={reser.id}
                 id={reser.id}
-                image="/borregoBlue.png"
+                image={reser.admin?.image ?? "/borregoBlue.png"}
                 reservable={reser}
               />
             );

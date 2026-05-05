@@ -4,6 +4,16 @@ export interface AdminInt {
   email: string;
   password: string;
   role: string;
+  image?: string | null;
+  image_id?: string | null;
+}
+
+export interface RateableAdminInt {
+  id: number;
+  name: string;
+  image?: string | null;
+  myRating?: number;
+  myComment?: string | null;
 }
 
 export interface UserInt {

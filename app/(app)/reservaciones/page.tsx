@@ -33,7 +33,7 @@ export default function page() {
               <Reservation
                 id={reserva.id}
                 image={
-                  reserva.reservable?.space?.image ?? "/samples/fondo.jpeg"
+                  reserva.reservable?.admin?.image ?? "/samples/fondo.jpeg"
                 }
                 date={formatearFecha(new Date(reserva.reservation_date))}
                 location={reserva.reservable?.space?.location ?? ""}

@@ -1,6 +1,7 @@
 "use client";
 
 import Loader from "@/components/shared/Loader";
+import AdminRatingModal from "@/components/pages/ratings/AdminRatingModal";
 import { fetcher } from "@/config/fetcher";
 import { RootState } from "@/redux/store";
 import { loadPerfil } from "@/redux/thunks/authThunk";
@@ -23,6 +24,7 @@ export default function layout({ children }: Props) {
   const { auth, cargando } = useSelector((state: RootState) => state.auth);
   const [menuIcon, setIcon] = useState(false);
   const [announcements, setAnnouncements] = useState(false)
+  const [ratingModal, setRatingModal] = useState(false);
 
 
   const dispatch = useDispatch<any>();
@@ -78,6 +80,15 @@ export default function layout({ children }: Props) {
               onClick={()=>setAnnouncements(!announcements)}
             ></button>
 
+            <button
+              type="button"
+              className="fa-solid fa-star text-yellow-500 text-xl"
+              onClick={() => {
+                setAnnouncements(false);
+                setRatingModal(true);
+              }}
+            ></button>
+
             <div className={`absolute top-10 right-5 bg-white z-40 p-4 w-56 h-36 space-y-2 overflow-y-auto ${announcements ? "":"hidden"}`}>
 
               {announces && announces.length > 0 ? announces.map((announce=>(
@@ -96,6 +107,7 @@ export default function layout({ children }: Props) {
 
 
             </div>
+            <AdminRatingModal active={ratingModal} setActive={setRatingModal} />
 
             <button
               onClick={handleSmallerScreensNavigation}
